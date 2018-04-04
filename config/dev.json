@@ -1,0 +1,12 @@
+{
+  "http": {
+    "ip": "127.0.0.1",
+    "port": 9000
+  },
+  "logs": {
+    "console": {
+      "active": true,
+      "level": "info"
+    }
+  }
+}
