@@ -72,6 +72,30 @@ function produce() {
         doc: 'Port to bind to.', 
         format: Number, default: 9000, arg: 'http-port'
       }
+    },
+    smtp: {
+      host: {
+        doc: 'Hostname of the SMTP API that will send the emails.',
+        format: String, default: 'smtp.ethereal.email'
+      },
+      port: {
+        doc: 'Port of the SMTP API.',
+        format: Number, default: 587
+      },
+      auth: {
+        user: {
+          doc: 'Username on the SMTP API',
+          format: String, default: ''
+        },
+        pass: {
+          doc: 'Password on the SMTP API',
+          format: String, default: ''
+        }
+      },
+      sender: {
+        doc: 'Email address of the sender.',
+        format: String, default: 'no-reply@pryv.com'
+      }
     }
   });
 }

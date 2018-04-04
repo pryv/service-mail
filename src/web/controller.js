@@ -1,5 +1,3 @@
-const errors = require('components/errors').factory;
-
 // ----------------------------------------------- (sync) express error handling
 
 function mount(ctx, handler) {
@@ -21,7 +19,7 @@ function catchAndNext(handler) {
 
 // --------------------------------------------------------------------- factory
 
-module.exports = function (ctx: Context) {
+module.exports = function (ctx) {
   return {
     sendWelcomeMail: mount(ctx, require('./op/send_welcome_mail')),
   };

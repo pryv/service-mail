@@ -98,18 +98,12 @@ class Server {
     var app = express(); 
     
     // Preprocessing middlewares
-    // TODO: do we need all these?
-    // app.disable('x-powered-by');
-    // app.use(middleware.subdomainToPath([]));
     app.use(bodyParser.json());
-    // app.use(middleware.commonHeaders({version: '1.0.0'}));
     
     this.defineApplication(app); 
     
     // Postprocessing middlewares
-    // TODO: do we need all these?
-    // app.use(middleware.notFound);
-    // app.use(errorsMiddleware(this.errorLogger));
+    // TODO: error/notfound middleware?
 
     return app; 
   }
