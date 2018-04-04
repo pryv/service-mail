@@ -9,8 +9,7 @@ const logging = require('./logging');
 // const middleware = require('components/middleware');
 // const errorsMiddleware = require('./middleware/errors');
 
-// TODO: implement this for mails
-// const controllerFactory = require('./web/controller');
+const controllerFactory = require('./web/controller');
 
 const KEY_IP = 'http.ip';
 const KEY_PORT = 'http.port';  
@@ -20,14 +19,15 @@ const KEY_PORT = 'http.port';
  */
 class Server {
   
-  constructor(settings) {
+  constructor(settings, context) {
     const logSettings = settings.get('logs').obj();
     const logFactory = logging(logSettings);
     
     this.logger = logFactory.getLogger('mailing-server');
     this.errorLogger = logFactory.getLogger('errors');
     this.settings = settings; 
-  
+    
+    this.context = context;
     this.expressApp = this.setupExpress();
     
     const ip = settings.get(KEY_IP).str(); 
@@ -61,7 +61,6 @@ class Server {
   
   /** Logs that the server has started.
    */
-  // TODO: explain this
   logStarted(arg) {
     const addr = this.server.address(); 
     this.logger.info(`started. (http://${addr.address}:${addr.port})`);
@@ -98,15 +97,16 @@ class Server {
         
     var app = express(); 
     
+    // Preprocessing middlewares
     // TODO: do we need all these?
     // app.disable('x-powered-by');
     // app.use(middleware.subdomainToPath([]));
     app.use(bodyParser.json());
     // app.use(middleware.commonHeaders({version: '1.0.0'}));
     
-    // TODO: why in between?
     this.defineApplication(app); 
     
+    // Postprocessing middlewares
     // TODO: do we need all these?
     // app.use(middleware.notFound);
     // app.use(errorsMiddleware(this.errorLogger));
@@ -118,13 +118,13 @@ class Server {
    */   
   defineApplication(app) {
     
-    // TODO: implement controller
-    // const c = controllerFactory(); 
+    const ctx = this.context
+    const c = controllerFactory(ctx); 
     
     app.get('/system/status', systemStatus);
     
-    // TODO: add routes
-    // app.post('/:user_lang/sendmail', c.sendMail);
+    app.post('/sendmail/welcome', c.sendWelcomeMail);
+
   }
 }
 
