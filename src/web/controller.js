@@ -21,6 +21,6 @@ function catchAndNext(handler) {
 
 module.exports = function (ctx) {
   return {
-    sendWelcomeMail: mount(ctx, require('./op/send_welcome_mail')),
+    sendWelcomeMail: mount(ctx, require('./op/send_welcome_mail'))
   };
 };
