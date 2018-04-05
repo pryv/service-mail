@@ -11,18 +11,18 @@ async function sendWelcomeMail(ctx, req, res) {
   if (recipient == null) throw new Error('Missing recipient email address.');
     
   const email = {
-    to: recipient,
-    text: 'Plaintext version of the message',
+    to: recipient
   };
   
-  // TODO: expose only render function from ctx?
-  const content = await ctx.templater.renderAll('welcome', substitutions);
+  const transport = ctx.transporter;
+  const template = ctx.templater;
+  
+  const content = await template.renderAll('welcome', substitutions);
   email.subject = content.subject;
   email.html = content.html;
   email.text = content.text;
 
-  // TODO: expose only sendmail function from ctx?
-  const result = await ctx.transporter.sendMail(email);
+  const result = await transport.sendMail(email);
   
   res
     .status(200)

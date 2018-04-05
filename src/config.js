@@ -74,6 +74,16 @@ function produce() {
         format: Number, default: 9000, arg: 'http-port'
       }
     },
+    sendmail: {
+      active: {
+        doc: 'If set to true, emails will be sent through sendmail command instead of SMTP.',
+        format: Boolean, default: false
+      },
+      path: {
+        doc: 'Path to the sendmail command.',
+        format: String, default: 'sendmail'
+      }
+    },
     smtp: {
       host: {
         doc: 'Hostname of the SMTP API that will send the emails.',

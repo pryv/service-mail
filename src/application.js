@@ -29,7 +29,19 @@ function createLogFactory(settings) {
 
 function createContext(settings, logFactory) {
   const emailDefaults = settings.get('email.defaults').obj();
-  const transportConfig = settings.get('smtp').obj();
+  
+  let transportConfig;
+  // Using sendmail command as transport
+  if(settings.get('sendmail.active').bool()) {
+    transportConfig = {
+      sendmail: true,
+      path: settings.get('sendmail.path').str()
+    }
+  }
+  // Using SMTP as transport
+  else {
+    transportConfig = settings.get('smtp').obj();
+  }
   return new Context(transportConfig, emailDefaults, logFactory);
 }
 
