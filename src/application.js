@@ -28,8 +28,9 @@ function createLogFactory(settings) {
 }
 
 function createContext(settings, logFactory) {
-  // TODO: For now Context is empty but will probably contain templating
-  return new Context(settings, logFactory);
+  const emailDefaults = settings.get('email.defaults').obj();
+  const transportConfig = settings.get('smtp').obj();
+  return new Context(transportConfig, emailDefaults, logFactory);
 }
 
 /** The mailing application holds references to all subsystems and ties everything
@@ -43,7 +44,7 @@ class Application {
     
     this.context = createContext(this.settings, this.logFactory);
     
-    this.server = new Server(this.settings);
+    this.server = new Server(this.settings, this.context);
     
     return this; 
   }

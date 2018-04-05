@@ -3,6 +3,7 @@
 // Our convict configuration that determines the configuration schema. 
 
 const convict = require('convict');
+const path = require('path');
 
 function produce() {
   const formats = {
@@ -91,10 +92,14 @@ function produce() {
           doc: 'Password on the SMTP API',
           format: String, default: ''
         }
-      },
-      sender: {
-        doc: 'Email address of the sender.',
-        format: String, default: 'no-reply@pryv.com'
+      }
+    },
+    email: {
+      defaults: {
+        from: {
+          doc: 'Email address of the sender.',
+          format: String, default: 'no-reply@pryv.com'
+        }
       }
     }
   });
