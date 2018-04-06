@@ -53,7 +53,6 @@ class Server {
     const port = settings.get(KEY_PORT).num(); 
     
     const server = this.server = http.createServer(app);
-    
     const serverListen = bluebird.promisify(server.listen, {context: server});
     return serverListen(port, ip)
       .then(this.logStarted.bind(this));
@@ -90,11 +89,7 @@ class Server {
    * 
    * @return express application.
    */
-  setupExpress() {
-    const logger = this.logger;
-    const settings = this.settings;
-    const logSettings = settings.get('logs').obj();
-        
+  setupExpress() {        
     var app = express(); 
     
     // Preprocessing middlewares
@@ -103,7 +98,15 @@ class Server {
     this.defineApplication(app); 
     
     // Postprocessing middlewares
-    // TODO: error/notfound middleware?
+    app.use((err, req, res, next) => {
+      this.errorLogger.error(err);
+      res
+        .status(err.httpStatus || 500)
+        .json({
+          error: err,
+          request: req.body
+        });
+    });
 
     return app; 
   }
