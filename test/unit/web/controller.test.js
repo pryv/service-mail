@@ -1,5 +1,7 @@
-const should = require('should');
 /* global describe, it */
+
+const chai = require('chai');
+const assert = chai.assert; 
 
 require('../test-helpers');
 
@@ -17,10 +19,9 @@ describe('Controller', () => {
       };
 
       controller.sendWelcomeMail(req, {}, (err, res) => {
-        should.not.exist(res);
-        should.exist(err);
-        // TODO: should(err).be.instanceof(APIError);
-        // TODO: should(err.id).be.equal(ErrorIds.MissingHeader);
+        assert.isNull(res);
+        assert.isNotNull(err);
+        // TODO: check error id/status
         done();
       });
     });
@@ -31,11 +32,10 @@ describe('Controller', () => {
         headers: {to: 'test@test.com'}
       };
 
-      controller.storeSeriesData(req, {}, (err, res) => {
-        should.not.exist(res);
-        should.exist(err);
-        // TODO: should(err).be.instanceof(APIError);
-        // TODO: should(err.id).be.equal(ErrorIds.InvalidItemId);
+      controller.sendWelcomeMail(req, {}, (err, res) => {
+        assert.isNull(res);
+        assert.isNotNull(err);
+        // TODO: check error id/status
         done();
       });
     });

@@ -1,7 +1,9 @@
-const should = require('should');
+/* global describe, it, beforeEach, afterEach */
+
+const chai = require('chai');
+const assert = chai.assert;
 const superagent = require('superagent');
 const url = require('url');
-/* global describe, it, beforeEach, afterEach */
 
 const { settings } = require('./test-helpers');
 
@@ -20,7 +22,7 @@ describe('Server', function() {
   }
 
   it('can be constructed', function() {
-    should.exist(server);
+    assert.isNotNull(server);
   });
   
   describe('.start', function() {    
@@ -37,7 +39,7 @@ describe('Server', function() {
       var response = request.get(statusUrl);
 
       return response.then((res) => {
-        should.equal(res.status, 200);
+        assert.strictEqual(res.status, 200);
       });
     });
   });

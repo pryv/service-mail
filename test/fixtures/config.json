@@ -4,6 +4,7 @@
     "port": 9000
   },
   "logs": {
+    "prefix": "TEST",
     "console": {
       "active": true,
       "level": "error"
