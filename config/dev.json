@@ -11,6 +11,7 @@
   },
   "smtp": {
     "host": "smtp.sendgrid.net",
+    "host": "smtp.ethereal.email",
     "port": 587,
     "auth": {
       "user": "apikey",

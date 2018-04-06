@@ -6,7 +6,8 @@
   "author": "Modoux Thiébaud",
   "license": "MIT",
   "scripts": {
-    "start": "./bin/server"
+    "start": "./bin/server",
+    "test": "node_modules/.bin/mocha test/**/*.test.js"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
@@ -16,10 +17,15 @@
     "express": "^4.16.3",
     "http": "^0.0.0",
     "nodemailer": "^4.6.4",
+    "path": "^0.12.7",
     "pug": "^2.0.3",
+    "superagent": "^3.8.2",
+    "url": "^0.11.0",
     "winston": "^2.4.1"
   },
   "devDependencies": {
-    "eslint": "^4.9.0"
+    "eslint": "^4.9.0",
+    "mocha": "^5.0.5",
+    "should": "^13.2.1"
   }
 }

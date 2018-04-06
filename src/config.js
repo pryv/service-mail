@@ -77,7 +77,7 @@ function produce() {
     sendmail: {
       active: {
         doc: 'If set to true, emails will be sent through sendmail command instead of SMTP.',
-        format: Boolean, default: false
+        format: Boolean, default: true
       },
       path: {
         doc: 'Path to the sendmail command.',
@@ -87,7 +87,7 @@ function produce() {
     smtp: {
       host: {
         doc: 'Hostname of the SMTP API that will send the emails.',
-        format: String, default: 'smtp.ethereal.email'
+        format: String, default: ''
       },
       port: {
         doc: 'Port of the SMTP API.',

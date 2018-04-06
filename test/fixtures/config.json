@@ -1,0 +1,16 @@
+{
+  "http": {
+    "ip": "127.0.0.1",
+    "port": 9000
+  },
+  "logs": {
+    "console": {
+      "active": true,
+      "level": "error"
+    }
+  },
+  "smtp": {
+    "host": "smtp.ethereal.email",
+    "port": 587
+  }
+}
