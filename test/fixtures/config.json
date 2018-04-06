@@ -12,6 +12,10 @@
   },
   "smtp": {
     "host": "smtp.ethereal.email",
-    "port": 587
+    "port": 587,
+    "auth": {
+      "user": "btvryvs5al5mjpa3@ethereal.email",
+      "pass": "VfNxJctkjrURkyThZr"
+    }
   }
 }

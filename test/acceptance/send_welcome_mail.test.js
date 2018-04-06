@@ -8,25 +8,15 @@ const nodemailer = require('nodemailer');
 
 const {settings, logFactory} = require('./test-helpers');
 const Context = require('../../src/context');
-const Server = require('../../src/server')
+const Server = require('../../src/server');
 
 describe('Sending emails', function() {
-  
-  // Set up a test account.
-  let testAccount; 
-  before(async () => {
-    testAccount = await nodemailer.createTestAccount();
-  });
   
   // Build the context
   let context;
   before(() => {
     const emailDefaults = settings.get('email.defaults').obj();
-    let transportConfig = settings.get('smtp').obj();
-    transportConfig.auth = {
-      user: testAccount.user,
-      pass: testAccount.pass
-    }
+    const transportConfig = settings.get('smtp').obj();
     context = new Context(transportConfig, emailDefaults, logFactory);
   });
   
