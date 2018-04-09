@@ -1,8 +1,9 @@
 
 /** POST /sendmail/welcome - Send a welcome email. 
  */
-async function sendWelcomeMail(ctx, req, res) {
+async function sendMail(ctx, req, res) {
   
+  const template = req.params.template;
   const substitutions = req.body.substitutions;
   const recipient = req.body.to;
 
@@ -14,19 +15,19 @@ async function sendWelcomeMail(ctx, req, res) {
     to: recipient
   };
   
-  const transport = ctx.transporter;
-  const template = ctx.templater;
+  const transporter = ctx.transporter;
+  const templating = ctx.templating;
   
-  const content = await template.renderAll('welcome', substitutions);
+  const content = await templating.renderAll(template, substitutions);
   email.subject = content.subject;
   email.html = content.html;
   email.text = content.text;
 
-  const result = await transport.sendMail(email);
+  const result = await transporter.sendMail(email);
   
   res
     .status(200)
     .json(result);
 }
 
-module.exports = sendWelcomeMail;
+module.exports = sendMail;

@@ -120,7 +120,7 @@ class Server {
     
     app.get('/system/status', systemStatus);
     
-    app.post('/sendmail/welcome', c.sendWelcomeMail);
+    app.post('/sendmail/:template', c.sendMail);
 
   }
 }

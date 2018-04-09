@@ -9,7 +9,7 @@ class Context {
   
   constructor(transportConfig, emailDefaults, logFactory) {
     this.transporter = mailer.createTransport(transportConfig, emailDefaults);
-    this.templater = new templater();
+    this.templating = new templater();
   }
   
 }

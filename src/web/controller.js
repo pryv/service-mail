@@ -11,7 +11,7 @@ function catchAndNext(handler) {
       return await handler(req, res, next);
     }
     catch (err) {
-      // TODO: do something whith the error?
+      // TODO: parse the error into API error?
       next(err);
     }
   };
@@ -21,6 +21,6 @@ function catchAndNext(handler) {
 
 module.exports = function (ctx) {
   return {
-    sendWelcomeMail: mount(ctx, require('./op/send_welcome_mail'))
+    sendMail: mount(ctx, require('./op/send_mail'))
   };
 };
