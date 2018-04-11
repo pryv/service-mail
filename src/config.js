@@ -1,118 +1,141 @@
-// @flow
+// Encapsulates values that are obtained from the configuration (file/...) using
+// a convict configuration for this project. 
+// Example: 
+// 
+//   var settings = Settings.load(); 
+//   var value = settings.get('logs.console.active');
+//   value.bool() //=> true (or a type error)
+// 
 
-// Our convict configuration that determines the configuration schema. 
-
-const convict = require('convict');
-const path = require('path');
-
-function produce() {
-  const formats = {
-    logLevel: [ 'debug', 'info', 'warn', 'error' ], 
-  };
+class ExistingValue {
   
-  return convict({
-    config: {
-      doc: 'Path to the server configuration file.', 
-      format: String, 
-      default: 'config/dev.json', 
-      arg: 'config'
-    },
-    logs: {
-      prefix: { default: '', format: String },
-      console: {
-        active: {
-          doc: 'Should the server log to console?',
-          format: Boolean, default: true
-        },
-        level: {
-          doc: 'Log level for the console.',
-          format: formats.logLevel, default: 'warn'
-        },
-        colorize: {
-          doc: 'Should console output be colorized?',
-          format: Boolean, default: true
-        }
-      },
-      file: {
-        active: {
-          doc: 'Should the server log to a file?',
-          format: Boolean, default: false
-        },
-        level: {
-          doc: 'Log level for the log file.',
-          format: formats.logLevel, default: 'error'
-        },
-        path: {
-          doc: 'Where is the log file stored?', 
-          format: String, default: 'server.log'
-        },
-        maxFileBytes: { format: 'nat', default: 4096 },
-        maxNbFiles: { format: 'nat', default: 20 }
-      },
-      airbrake: {
-        active: {
-          doc: 'Should the server log to airbrake?',
-          format: Boolean, default: false
-        },
-        key: {
-          doc: 'Airbrake API key.',
-          format: String, default: '',
-        },
-        projectId: {
-          doc: 'Airbrake project id.',
-          format: String, default: '',
-        }
-      }
-    },
-    http: {
-      ip: {
-        doc: 'IP address to bind the server to.', 
-        format: String, default: '127.0.0.1', arg: 'http-ip'
-      }, 
-      port: {
-        doc: 'Port to bind to.', 
-        format: Number, default: 9000, arg: 'http-port'
-      }
-    },
-    sendmail: {
-      active: {
-        doc: 'If set to true, emails will be sent through sendmail command instead of SMTP.',
-        format: Boolean, default: true
-      },
-      path: {
-        doc: 'Path to the sendmail command.',
-        format: String, default: 'sendmail'
-      }
-    },
-    smtp: {
-      host: {
-        doc: 'Hostname of the SMTP API that will send the emails.',
-        format: String, default: ''
-      },
-      port: {
-        doc: 'Port of the SMTP API.',
-        format: Number, default: 587
-      },
-      auth: {
-        user: {
-          doc: 'Username on the SMTP API',
-          format: String, default: ''
-        },
-        pass: {
-          doc: 'Password on the SMTP API',
-          format: String, default: ''
-        }
-      }
-    },
-    email: {
-      defaults: {
-        from: {
-          doc: 'Email address of the sender.',
-          format: String, default: 'no-reply@pryv.com'
-        }
-      }
+  constructor(name, value) {
+    this.name = name; 
+    this.value = value; 
+  }
+  
+  // Returns the configuration value as a boolean. 
+  // 
+  bool() {
+    const value = this.value; 
+    if (typeof value === 'boolean') {
+      return value; 
     }
-  });
+    
+    throw this._typeError('boolean');
+  }
+  
+  /** 
+   * Returns the configuration value as a string. 
+   */
+  str() {
+    const value = this.value; 
+    if (typeof value === 'string') {
+      return value; 
+    }
+    
+    throw this._typeError('string');
+  }
+  
+  /** 
+   * Returns the configuration value as a number. 
+   */
+  num() {
+    const value = this.value; 
+    if (typeof value === 'number') {
+      return value; 
+    }
+    
+    throw this._typeError('number');
+  }
+  
+  /** 
+   * Returns the configuration value as an unspecified object. 
+   */
+  obj() {
+    const value = this.value; 
+    
+    // NOTE Flow doesn't want values to be null, that's why the second check is
+    // also needed. (typeof null === 'object'...)
+    if (typeof value === 'object' && value != null) {
+      return value; 
+    }
+    
+    throw this._typeError('object');
+  }
+
+  /** 
+   * Returns the configuration value as an unspecified object. 
+   */
+  fun() {
+    const value = this.value;  
+    
+    if (typeof value === 'function') {
+      return value; 
+    }
+    
+    throw this._typeError('function');
+  }
+  
+  // Returns true if the value exists, meaning that it is not null or undefined.
+  // 
+  exists() {
+    const value = this.value;  
+
+    return value != null; 
+  }
+  
+  // Returns true if the value is either null, undefined or the empty string. 
+  // 
+  blank() {
+    const value = this.value;  
+
+    return !this.exists() || value === ''; 
+  }
+  
+  _typeError(typeName) {
+    const name = this.name; 
+        
+    return new Error(
+      `Configuration value type mismatch: ${name} should be of type ${typeName}, but isn't. `+
+      `(typeof returns '${typeof this.value}')`); 
+  }
 }
 
-module.exports = produce;
+class MissingValue {
+    
+  constructor(key) {
+    this.message = `Configuration for '${key}' missing.`;
+  }
+  
+  error() {
+    return new Error(this.message);
+  }
+  
+  bool() {
+    throw this.error(); 
+  }
+  str() {
+    throw this.error(); 
+  }
+  num() {
+    throw this.error(); 
+  }
+  obj() {
+    throw this.error(); 
+  }
+  fun() {
+    throw this.error(); 
+  }
+  
+  exists() {
+    return false; 
+  }
+  blank() {
+    return true; 
+  }
+}
+
+module.exports = {
+  ExistingValue, MissingValue
+};
