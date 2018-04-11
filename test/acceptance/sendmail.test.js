@@ -24,10 +24,10 @@ describe('Sending emails through SMTP', function() {
 
   it('should send valid welcome email', async function () {
     const recipient = 'toto@test.com';
-    const substitutions = {name: 'toto'};
+    const substitutions = {name: 'Toto', email: recipient, user: 'toto'};
     
     const emailInfo = await request(app.server.expressApp)
-      .post('/sendmail/welcome')
+      .post('/sendmail/welcome/en')
       .send({
         to: recipient,
         substitutions: substitutions

@@ -4,6 +4,7 @@
 async function sendMail(ctx, req, res) {
   
   const template = req.params.template;
+  const lang = req.params.lang;
   const substitutions = req.body.substitutions;
   const recipient = req.body.to;
 
@@ -19,7 +20,7 @@ async function sendMail(ctx, req, res) {
   const transporter = ctx.transporter;
   const templating = ctx.templating;
   
-  const content = await templating.renderAll(template, substitutions);
+  const content = await templating.renderAll(template+'/'+lang, substitutions);
   email.subject = content.subject;
   email.html = content.html;
   email.text = content.text;

@@ -115,7 +115,7 @@ class Server {
     
     app.get('/system/status', systemStatus);
     
-    app.post('/sendmail/:template', c.sendMail);
+    app.post('/sendmail/:template/:lang', c.sendMail);
 
   }
 }
