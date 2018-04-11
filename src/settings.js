@@ -38,15 +38,15 @@ class Settings {
         from: "no-reply@pryv.com"
       },
       smtp: {
-        host: "smtp.localhost",
+        host: "smtp.ethereal.email",
         port: 587,
         auth: {
-          user: "CHANGE_ME",
-          pass: "CHANGE_ME"
+          user: "btvryvs5al5mjpa3@ethereal.email",
+          pass: "VfNxJctkjrURkyThZr"
         }
       },
       sendmail: {
-        active: true,
+        active: false,
         path: 'sendmail'
       },
       http: {

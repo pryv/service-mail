@@ -5,15 +5,17 @@ const assert = chai.assert;
 const superagent = require('superagent');
 const url = require('url');
 
-const { settings } = require('./test-helpers');
-
 const Application = require('../../src/application');
 
 describe('Server', function() {
   const request = superagent;
-
-  const application = new Application().init(settings); 
-  const server = application.server; 
+  
+  // Start the server
+  let server;
+  before(async () => {
+    const app = await new Application().setup(); 
+    server = app.server;
+  });
   
   function toUrl(path) {
     const baseUrl = server.baseUrl; 

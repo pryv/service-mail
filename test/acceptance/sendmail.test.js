@@ -6,35 +6,27 @@ const assert = chai.assert;
 const request = require('supertest');
 const nodemailer = require('nodemailer');
 
-const {settings, logFactory} = require('./test-helpers');
 const Context = require('../../src/context');
-const Server = require('../../src/server');
+const Application = require('../../src/application');
 
 describe('Sending emails through SMTP', function() {
   
-  // Build the context
-  let context, emailDefaults, transportConfig;
-  before(() => {
-    emailDefaults = settings.get('email.defaults').obj();
-    transportConfig = settings.get('smtp').obj();
-    context = new Context(transportConfig, emailDefaults, logFactory);
+  // Run the app
+  let app;
+  before(async () => {
+    app = await new Application().setup();
+    app.run(); 
   });
   
-  // Now start the server.
-  let server; 
-  before(async () => {
-    server = new Server(settings, context);
-    server.start();
-  });
   after(() => {
-    server.stop(); 
+    app.server.stop(); 
   });
 
   it('should send valid welcome email', async function () {
     const recipient = 'toto@test.com';
     const substitutions = {name: 'toto'};
     
-    const emailInfo = await request(server.expressApp)
+    const emailInfo = await request(app.server.expressApp)
       .post('/sendmail/welcome')
       .send({
         to: recipient,
@@ -51,9 +43,10 @@ describe('Sending emails through SMTP', function() {
     
     // Check email envelope
     const envelope = email.envelope;
+    const expectedFrom = app.settings.get('email.from').str();
     assert.isNotNull(envelope);
     assert.strictEqual(envelope.to[0], to);
-    assert.strictEqual(envelope.from, emailDefaults.from);
+    assert.strictEqual(envelope.from, expectedFrom);
     
     // Check content of the email, i.e. the substitution of variables
     const validationURL = nodemailer.getTestMessageUrl(email);
