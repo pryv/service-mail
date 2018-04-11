@@ -8,6 +8,7 @@ async function sendMail(ctx, req, res) {
   const recipient = req.body.to;
 
   // If params are not there, abort. 
+  // TODO: use custom errors through factory?
   if (substitutions == null) throw new Error('Missing substitution variables.');
   if (recipient == null) throw new Error('Missing recipient email address.');
     

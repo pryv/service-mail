@@ -11,7 +11,7 @@ function catchAndNext(handler) {
       return await handler(req, res, next);
     }
     catch (err) {
-      // TODO: parse the error into API error?
+      // TODO: parse error into API errors (remove stack trace, log)
       next(err);
     }
   };

@@ -1,14 +1,9 @@
 const http = require('http');
 const express = require('express');
 const bluebird = require('bluebird');
-
 const bodyParser = require('body-parser');
+
 const logging = require('./logging');
-
-// TODO: which middlewares do we need?
-// const middleware = require('components/middleware');
-// const errorsMiddleware = require('./middleware/errors');
-
 const controllerFactory = require('./web/controller');
 
 const KEY_IP = 'http.ip';
