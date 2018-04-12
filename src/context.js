@@ -26,7 +26,7 @@ class Context {
     this.templating = new templater();
   }
   
-  async renderEmail(recipient, template, lang, substitutions) {
+  async renderEmail(template, lang, recipient, substitutions) {
     const email = {
       to: recipient
     };
@@ -35,6 +35,7 @@ class Context {
     email.subject = content.subject;
     email.html = content.html;
     email.text = content.text;
+    return email;
   }
   
 }

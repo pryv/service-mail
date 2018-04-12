@@ -46,7 +46,7 @@ describe('Sending emails through SMTP', function() {
     const expectedFrom = app.settings.get('email.from').str();
     assert.isNotNull(envelope);
     assert.isNotNull(envelope.to);
-    assert.strictEqual(envelope.to.lenght, 1);
+    assert.strictEqual(envelope.to.length, 1);
     assert.strictEqual(envelope.to[0], to);
     assert.strictEqual(envelope.from, expectedFrom);
     
