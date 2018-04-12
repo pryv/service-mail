@@ -12,18 +12,10 @@ async function sendMail(ctx, req, res) {
   // TODO: use custom errors through factory?
   if (substitutions == null) throw new Error('Missing substitution variables.');
   if (recipient == null) throw new Error('Missing recipient email address.');
-    
-  const email = {
-    to: recipient
-  };
   
   const transporter = ctx.transporter;
-  const templating = ctx.templating;
   
-  const content = await templating.renderAll(template+'/'+lang, substitutions);
-  email.subject = content.subject;
-  email.html = content.html;
-  email.text = content.text;
+  const email = await ctx.renderEmail(template, lang, recipient, substitutions);
 
   const result = await transporter.sendMail(email);
   

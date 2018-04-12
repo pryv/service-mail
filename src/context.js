@@ -26,5 +26,16 @@ class Context {
     this.templating = new templater();
   }
   
+  async renderEmail(recipient, template, lang, substitutions) {
+    const email = {
+      to: recipient
+    };
+    const templatePath = [template, lang].join('/');
+    const content = await this.templating.renderAll(templatePath, substitutions);
+    email.subject = content.subject;
+    email.html = content.html;
+    email.text = content.text;
+  }
+  
 }
 module.exports = Context;
