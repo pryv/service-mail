@@ -4,6 +4,7 @@ const lodash = require('lodash');
 const Hjson = require('hjson');
 const YAML = require('js-yaml');
 const yargs = require('yargs');
+const path = require('path');
 
 const { ExistingValue, MissingValue } = require('./config');
 
@@ -52,6 +53,9 @@ class Settings {
       http: {
         ip: "127.0.0.1",
         port: 9000
+      },
+      templates: {
+        root: path.resolve('templates')
       }
     };
   }

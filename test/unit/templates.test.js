@@ -13,7 +13,8 @@ describe('Templates', () => {
     const template = 'welcome';
     const lang = 'fr';
     const substitutions = {
-      
+      name: 'toto',
+      surname: 'yota'
     };
     
     // Build the app context, which contains the templating

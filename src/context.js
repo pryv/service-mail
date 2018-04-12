@@ -23,7 +23,9 @@ class Context {
       transportConfig = settings.get('smtp').obj();
     }
     this.transporter = mailer.createTransport(transportConfig, emailConfig);
-    this.templating = new templater();
+    
+    const templatingConfig = settings.get('templates').obj();
+    this.templating = new templater(templatingConfig);
   }
   
   async renderEmail(template, lang, recipient, substitutions) {
