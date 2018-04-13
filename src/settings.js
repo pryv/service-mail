@@ -6,16 +6,9 @@ const YAML = require('js-yaml');
 const yargs = require('yargs');
 const path = require('path');
 
-const { ExistingValue, MissingValue } = require('./config');
-
 // -----------------------------------------------------------------------------
 
 // Settings of an application. 
-// 
-// Example:
-//    
-//    const val = settings.get('foo.bar.baz') // => ConfigValue
-//    val.str()     // casts value to a string (or errors out).
 // 
 class Settings {
   
@@ -113,10 +106,11 @@ class Settings {
   get(key) {
     const config = this.config;
     
-    if (! lodash.has(config, key)) return new MissingValue(key);
+    if (! lodash.has(config, key)) {
+      throw new Error(`Configuration for '${key}' missing.`);
+    }
 
-    const val = lodash.get(config, key);
-    return new ExistingValue(key, val);
+    return lodash.get(config, key);
   }
   
   has(key) {

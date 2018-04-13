@@ -68,7 +68,7 @@ describe('Sending emails through SMTP', function() {
     
     // Validate that email was sent from/to the right sender/recipient
     const envelope = email.envelope;
-    const expectedFrom = app.settings.get('email.from').str();
+    const expectedFrom = app.settings.get('email.from');
     assert.isNotNull(envelope);
     assert.isNotNull(envelope.to);
     assert.strictEqual(envelope.to.length, 1);

@@ -8,22 +8,22 @@ const lodash = require('lodash');
 class Context {
   
   constructor(settings, logger) {
-    const emailConfig= settings.get('email').obj();
+    const emailConfig= settings.get('email');
     
     let transportConfig;
     // Using sendmail command as transport
-    if(settings.get('sendmail.active').bool()) {
+    if(settings.get('sendmail.active')) {
       transportConfig = {
         sendmail: true,
-        path: settings.get('sendmail.path').str()
+        path: settings.get('sendmail.path')
       }
     }
     // Using SMTP as transport
     else {
-      transportConfig = settings.get('smtp').obj();
+      transportConfig = settings.get('smtp');
     }
         
-    const templatesConfig = settings.get('templates').obj();
+    const templatesConfig = settings.get('templates');
     
     this.mailing = new mailing({
       message: emailConfig,

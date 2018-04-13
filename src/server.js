@@ -15,7 +15,7 @@ const KEY_PORT = 'http.port';
 class Server {
   
   constructor(settings, context) {
-    const logSettings = settings.get('logs').obj();
+    const logSettings = settings.get('logs');
     const logFactory = logging(logSettings);
     
     this.logger = logFactory.getLogger('mailing-server');
@@ -25,8 +25,8 @@ class Server {
     this.context = context;
     this.expressApp = this.setupExpress();
     
-    const ip = settings.get(KEY_IP).str(); 
-    const port = settings.get(KEY_PORT).num(); 
+    const ip = settings.get(KEY_IP); 
+    const port = settings.get(KEY_PORT); 
     this.baseUrl = `http://${ip}:${port}/`;
     
     this.logger.info('constructed.');
@@ -44,8 +44,8 @@ class Server {
     const settings = this.settings;
     const app = this.expressApp;
     
-    const ip = settings.get(KEY_IP).str(); 
-    const port = settings.get(KEY_PORT).num(); 
+    const ip = settings.get(KEY_IP); 
+    const port = settings.get(KEY_PORT); 
     
     const server = this.server = http.createServer(app);
     const serverListen = bluebird.promisify(server.listen, {context: server});

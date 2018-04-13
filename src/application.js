@@ -26,10 +26,10 @@ class Application {
   
   initLogger() {
     const settings = this.settings;
-    const logSettings = settings.get('logs').obj();
+    const logSettings = settings.get('logs');
     const logFactory = this.logFactory = logging(logSettings).getLogger;
     const logger = this.logger = logFactory('application');
-    const consoleLevel = settings.get('logs.console.level').str();
+    const consoleLevel = settings.get('logs.console.level');
     
     assert(this.logger != null, 'AF: logger init has succeeded');
     logger.info(`Console logging is configured at level '${consoleLevel}'`);
