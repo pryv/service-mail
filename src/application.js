@@ -20,34 +20,33 @@ class Application {
     if (overrideSettings != null) {
       this.settings.merge(overrideSettings);
     }
+    
+    assert(this.settings != null, 'AF: settings init has succeeded');
   }
   
   initLogger() {
     const settings = this.settings;
     const logSettings = settings.get('logs').obj();
     const logFactory = this.logFactory = logging(logSettings).getLogger;
-    
     const logger = this.logger = logFactory('application');
-    
     const consoleLevel = settings.get('logs.console.level').str();
+    
+    assert(this.logger != null, 'AF: logger init has succeeded');
     logger.info(`Console logging is configured at level '${consoleLevel}'`);
   }
   
   initContext() {    
     this.context = new Context(this.settings, this.logFactory('context'));
-    this.logger.info('Context initialized.')
+    
+    assert(this.context != null, 'AF: context init has succeeded');
+    this.logger.info('Context initialized.');
   }
   
   async setup(overrideSettings) {
     
     await this.initSettings(overrideSettings);
-    assert(this.settings != null, 'AF: settings init has succeeded');
-
     this.initLogger();
-    assert(this.logger != null, 'AF: logger init has succeeded');
-
     this.initContext();
-    assert(this.context != null, 'AF: context init has succeeded');
     
     this.server = new Server(this.settings, this.context);
     
