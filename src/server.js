@@ -50,7 +50,7 @@ class Server {
     const server = this.server = http.createServer(app);
     const serverListen = bluebird.promisify(server.listen, {context: server});
     return serverListen(port, ip)
-      .then(this.logStarted.bind(this));
+      .then(() => this.logStarted());
   }
   
   /** Logs that the server has started.
