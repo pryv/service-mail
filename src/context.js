@@ -1,5 +1,4 @@
-const mailer = require('nodemailer');
-const templater = require('email-templates');
+const mailing = require('email-templates');
 const lodash = require('lodash');
 
 // Application context object, holding references to all major subsystems. Once
@@ -23,24 +22,15 @@ class Context {
     else {
       transportConfig = settings.get('smtp').obj();
     }
-    this.transporter = mailer.createTransport(transportConfig, emailConfig);
+        
+    const templatesConfig = settings.get('templates').obj();
     
-    const templatingConfig = settings.get('templates').obj();
-    this.templating = new templater(templatingConfig);
-  }
-  
-  async renderEmail(template, lang, recipient, substitutions) {
-    const templatePath = [template, lang].join('/');
-    const subs = lodash.cloneDeep(substitutions);
-    const email = {
-      to: recipient
-    };
-    
-    const content = await this.templating.renderAll(templatePath, subs);
-    email.subject = content.subject;
-    email.html = content.html;
-    email.text = content.text;
-    return email;
+    this.mailing = new mailing({
+      message: emailConfig,
+      views: templatesConfig,
+      transport: transportConfig,
+      preview: false // If true, it will open a webpage with a preview
+    });
   }
   
 }

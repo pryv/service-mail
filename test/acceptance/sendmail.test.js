@@ -4,9 +4,8 @@
 const chai = require('chai');
 const assert = chai.assert; 
 const request = require('supertest');
-const nodemailer = require('nodemailer');
+const lodash = require('lodash');
 
-const Context = require('../../src/context');
 const Application = require('../../src/application');
 
 describe('Sending emails through SMTP', function() {
@@ -14,7 +13,12 @@ describe('Sending emails through SMTP', function() {
   // Run the app
   let app;
   before(async () => {
-    app = await new Application().setup();
+    const overrideSettings = {
+      templates: {
+        root: fixture_path('templates')
+      }
+    };
+    app = await new Application().setup(overrideSettings);
     app.run(); 
   });
   
@@ -23,18 +27,39 @@ describe('Sending emails through SMTP', function() {
   });
 
   it('should send valid welcome email', async function () {
-    const recipient = 'toto@test.com';
-    const substitutions = {name: 'Toto', email: recipient, user: 'toto'};
     
+    const recipient = 'toto@test.com';
+    const substitutions = {
+      name: 'toto',
+      surname: 'yota'
+    };
+    
+    // NOTE: For some reason, email-templates library is adding
+    // properties to the substitutions object we pass as parameter here.
+    // Thus we clone it so that the original substitutions stay untouched.
+    const subs = lodash.cloneDeep(substitutions);
     const emailInfo = await request(app.server.expressApp)
-      .post('/sendmail/welcome/en')
+      .post('/sendmail/welcome/fr')
       .send({
         to: recipient,
-        substitutions: substitutions
+        substitutions: subs
       })
       .expect(200);
-      
     return emailValidation(emailInfo, recipient, substitutions);
+  });
+  
+  it('throws if there is no template available', async () => {
+    assert.throws(async () => {
+      const template = "notFound/eo";
+      // TODO: sendmail
+    });
+  });
+  
+  it('throws if some substitution variables are not provided', async () => {
+    assert.throws(async () => {
+      const substitutions = {};
+      // TODO: sendmail
+    });
   });
   
   function emailValidation(result, to, subs) {
@@ -50,16 +75,28 @@ describe('Sending emails through SMTP', function() {
     assert.strictEqual(envelope.to[0], to);
     assert.strictEqual(envelope.from, expectedFrom);
     
-    // Validate that email was actually received
-    const validationURL = nodemailer.getTestMessageUrl(email);
-    assert.isNotNull(validationURL);
-    assert.isNotFalse(validationURL);
+    // Validate email content
+    const content = JSON.parse(email.message);
+    assert.isNotNull(content.subject);
+    assert.isNotNull(content.text);
+    assert.isNotNull(content.html);
     
-    return request(validationURL)
-      .get('/')
-      .expect(200)
-      .then((res) => {
-        assert.isNotNull(res);
-      });
+    // Validate email language (fr)
+    const frenchWord = 'bonjour';
+    assert.include(content.subject, frenchWord);
+    assert.include(content.text, frenchWord);
+    assert.include(content.html, frenchWord);
+    
+    // Validate email subsitution of variables
+    for (sub of Object.values(subs)) {
+      assert.include(content.text, sub);
+      assert.include(content.html, sub);
+    }
   }
 });
+
+const path = require('path');
+
+function fixture_path(...fragments) {
+  return path.join(__dirname, '../fixtures', ...fragments);
+}

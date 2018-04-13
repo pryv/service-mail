@@ -13,11 +13,13 @@ async function sendMail(ctx, req, res) {
   if (substitutions == null) throw new Error('Missing substitution variables.');
   if (recipient == null) throw new Error('Missing recipient email address.');
   
-  const transporter = ctx.transporter;
-  
-  const email = await ctx.renderEmail(template, lang, recipient, substitutions);
-
-  const result = await transporter.sendMail(email);
+  const mailing = ctx.mailing;
+    
+  const result = await mailing.send({
+    message: {to: recipient},
+    template: [template, lang].join('/'),
+    locals: substitutions
+  });
   
   res
     .status(200)
