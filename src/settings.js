@@ -55,7 +55,9 @@ class Settings {
         port: 9000
       },
       templates: {
-        root: path.resolve('templates')
+        views: {
+          root: path.resolve('templates')
+        }
       }
     };
   }

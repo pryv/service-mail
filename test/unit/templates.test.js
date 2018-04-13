@@ -3,7 +3,7 @@
 const chai = require('chai');
 const assert = chai.assert; 
 
-const Settings = require('../../src/settings');
+const Application = require('../../src/application');
 
 describe('Templates', () => {
   
@@ -20,13 +20,20 @@ describe('Templates', () => {
     // Build the app context, which contains the templating
     let ctx;
     before(async () => {
-      const app = await new Application().setup();
+      const overrideSettings = {
+        templates: {
+          views: {
+            root: fixture_path('templates')
+          }
+        }
+      };
+      const app = await new Application().setup(overrideSettings);
       ctx = app.context;
     });
 
     it('renders all available templates, while using user language', async () => {
       const email = await ctx.renderEmail(template, lang, recipient, substitutions);
-      
+
       assert.isNotNull(email.subject);
       assert.isNotNull(email.text);
       assert.isNotNull(email.html);
@@ -41,10 +48,11 @@ describe('Templates', () => {
       assert.include(email.html, frenchWord);
       
       // Validate email content (subsitution of variables)
-      for (sub of substitutions) {
+      for (sub of Object.values(substitutions)) {
         assert.include(email.text, sub);
         assert.include(email.html, sub);
       }
+      
     });
     
     it('throws if there is no template available', async () => {
@@ -63,3 +71,9 @@ describe('Templates', () => {
     });
   });
 });
+
+const path = require('path');
+
+function fixture_path(...fragments) {
+  return path.join(__dirname, '../fixtures', ...fragments);
+}

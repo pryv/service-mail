@@ -1,5 +1,6 @@
 const mailer = require('nodemailer');
 const templater = require('email-templates');
+const lodash = require('lodash');
 
 // Application context object, holding references to all major subsystems. Once
 // the system is initialized, these instance references will not change  any
@@ -29,11 +30,13 @@ class Context {
   }
   
   async renderEmail(template, lang, recipient, substitutions) {
+    const templatePath = [template, lang].join('/');
+    const subs = lodash.cloneDeep(substitutions);
     const email = {
       to: recipient
     };
-    const templatePath = [template, lang].join('/');
-    const content = await this.templating.renderAll(templatePath, substitutions);
+    
+    const content = await this.templating.renderAll(templatePath, subs);
     email.subject = content.subject;
     email.html = content.html;
     email.text = content.text;
