@@ -27,28 +27,43 @@ class Settings {
         console: { active: true, level: 'info', colorize: true }, 
         file: { active: false },
       },
+      // Default values for emails, each email sent will contain these
       email: {
+        // Default sender email address
         from: "no-reply@pryv.com"
       },
+      // By default, the service-mail will use SMTP as transport
       smtp: {
+        // Host of the external email delivery service
         host: "smtp.ethereal.email",
+        // SMTP port
         port: 587,
+        // Credentials to authenticate against external service
         auth: {
           user: "btvryvs5al5mjpa3@ethereal.email",
           pass: "VfNxJctkjrURkyThZr"
         }
       },
+      // Alternative transport, using the sendmail command of the machine
       sendmail: {
+        // Will replace SMTP transport if set to true
         active: false,
+        // Path of the sendmail command on the machine
         path: 'sendmail'
       },
       http: {
+        // IP address on which the mailing server is listening
         ip: "127.0.0.1",
+        // Port on which the mailing server is listening
         port: 9000,
+        // Each sendmail request should contain authorization header that
+        // matches this key, used to prevent abuse.
         auth: "CHANGEME"
       },
       templates: {
+        // Root folder where the templates are stored
         root: path.resolve('templates'),
+        // Default language for templates
         defaultLang: 'en'
       }
     };
