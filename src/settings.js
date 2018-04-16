@@ -3,7 +3,6 @@ const bluebird = require('bluebird');
 const lodash = require('lodash');
 const Hjson = require('hjson');
 const YAML = require('js-yaml');
-const yargs = require('yargs');
 const path = require('path');
 
 // -----------------------------------------------------------------------------
@@ -75,26 +74,6 @@ class Settings {
     lodash.merge(this.config, obj);
     
     console.info(`Using configuration file at: ${path}`);
-  }
-  
-  // Parses the configuration on the command line (arguments).
-  // 
-  async parseCLargs(argv) {
-    const cli = yargs
-      .option('c', {
-        alias: 'config', 
-        type: 'string', 
-        describe: 'reads configuration file at PATH'
-      })
-      .usage('$0 [args] \n\n  starts a metadata service')
-      .help();      
-    
-    const out = cli.parse(argv);
-    
-    if (out.config != null) {
-      const configPath = path.resolve(out.config);
-      await this.loadFromFile(configPath);
-    }
   }
   
   // Merges settings in `other` with the settings stored here. 

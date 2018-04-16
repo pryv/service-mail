@@ -35,10 +35,8 @@ class Server {
   /**
    * Starts the HTTP server. 
    * 
-   * @return {Promise<true>} A promise that will resolve once the server is 
-   *    started and accepts connections.
    */
-  start() {
+  async start() {
     this.logger.info('starting...');
     
     const settings = this.settings;
@@ -49,33 +47,26 @@ class Server {
     
     const server = this.server = http.createServer(app);
     const serverListen = bluebird.promisify(server.listen, {context: server});
-    return serverListen(port, ip)
-      .then(() => this.logStarted());
-  }
-  
-  /** Logs that the server has started.
-   */
-  logStarted(arg) {
+    
+    await serverListen(port, ip);
+    
     const addr = this.server.address(); 
     this.logger.info(`started. (http://${addr.address}:${addr.port})`);
-    
-    // passthrough of our single argument
-    return arg;
   }
   
   /** 
    * Stops a running server instance. 
    * 
-   * @return {Promise<true>} A promise that will resolve once the server has 
-   *    stopped. 
    */
-  stop() {
+  async stop() {
     const server = this.server;
       
     this.logger.info('stopping...');
     
     const serverClose = bluebird.promisify(server.close, {context: server}); 
-    return serverClose();
+    await serverClose();
+    
+    this.logger.info(`stopped.`);
   }
   
   /** 

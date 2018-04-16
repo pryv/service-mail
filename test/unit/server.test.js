@@ -28,11 +28,11 @@ describe('Server', function() {
   });
   
   describe('.start', function() {    
-    beforeEach(function() {
-      server.start(); 
+    beforeEach( async () => {
+      await server.start(); 
     });
-    afterEach(function() {
-      server.stop(); 
+    afterEach( async () => {
+      await server.stop(); 
     });
     
     it('starts a http server on configured port', function() {

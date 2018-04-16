@@ -1,6 +1,8 @@
 // Load configuration file and start the server. 
 
 const assert = require('assert');
+const yargs = require('yargs');
+const path = require('yargs');
 
 const logging = require('./logging');
 const Context = require('./context');
@@ -15,13 +17,33 @@ class Application {
   async initSettings(overrideSettings) {
     this.settings = new Settings(); 
 
-    await this.settings.parseCLargs(process.argv);
+    await this.parseCLargs(process.argv);
 
     if (overrideSettings != null) {
       this.settings.merge(overrideSettings);
     }
     
     assert(this.settings != null, 'AF: settings init has succeeded');
+  }
+  
+  // Parses the configuration on the command line (arguments).
+  // 
+  async parseCLargs(argv) {
+    const cli = yargs
+      .option('c', {
+        alias: 'config', 
+        type: 'string', 
+        describe: 'reads configuration file at PATH'
+      })
+      .usage('$0 [args] \n\n  starts a metadata service')
+      .help();      
+    
+    const out = cli.parse(argv);
+    
+    if (out.config != null) {
+      const configPath = path.resolve(out.config);
+      await this.settings.loadFromFile(configPath);
+    }
   }
   
   initLogger() {
@@ -53,9 +75,12 @@ class Application {
     return this; 
   }
   
-  run() {
-    this.logger.info('Starting the server...')
-    this.server.start(); 
+  async run() {
+    await this.server.start(); 
+  }
+  
+  async close() {
+    await this.server.stop(); 
   }
 }
 

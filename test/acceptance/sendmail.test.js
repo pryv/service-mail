@@ -20,14 +20,14 @@ describe('Sending emails through SMTP', function() {
       }
     };
     app = await new Application().setup(overrideSettings);
-    app.run(); 
+    await app.run(); 
   });
   
-  after(() => {
-    app.server.stop(); 
+  after(async () => {
+    await app.close(); 
   });
 
-  it('should answers 200 OK', async () => {
+  it('answers 200 OK', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
       .send({
