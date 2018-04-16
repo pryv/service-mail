@@ -44,7 +44,8 @@ class Settings {
       },
       http: {
         ip: "127.0.0.1",
-        port: 9000
+        port: 9000,
+        auth: "CHANGEME"
       },
       templates: {
         root: path.resolve('templates'),

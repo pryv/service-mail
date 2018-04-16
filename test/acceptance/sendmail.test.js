@@ -11,6 +11,8 @@ const Application = require('../../src/application');
 
 describe('Sending emails through SMTP', function() {
   
+  const authKey = 'adminKey';
+  
   // Run the app
   let app;
   before(async () => {
@@ -18,6 +20,9 @@ describe('Sending emails through SMTP', function() {
       templates: {
         root: fixture_path('templates'),
         defaultLang: 'fr'
+      },
+      http: {
+        auth: authKey
       }
     };
     app = await new Application().setup(overrideSettings);
@@ -31,6 +36,7 @@ describe('Sending emails through SMTP', function() {
   it('answers 200 OK', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
+      .set('Authorization', authKey)
       .send({
         to: 'toto@test.com',
         substitutions: {
@@ -41,9 +47,37 @@ describe('Sending emails through SMTP', function() {
       .expect(200);
   });
   
+  it('throws if authorization key is missing', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/welcome/fr')
+      .send({
+        to: 'toto@test.com',
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        }
+      })
+      .expect(500);
+  });
+  
+  it('throws if authorization key is invalid', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/welcome/fr')
+      .set('Authorization', 'notvalid')
+      .send({
+        to: 'toto@test.com',
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        }
+      })
+      .expect(500);
+  });
+  
   it('throws if there is no template available for email content', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/nocontent/fr')
+      .set('Authorization', authKey)
       .send({
         to: 'toto@test.com',
         substitutions: {
@@ -57,6 +91,7 @@ describe('Sending emails through SMTP', function() {
   it('chooses default language (fr) if there is no template available for requested language (en)', async () => {
     const result = await request(app.server.expressApp)
       .post('/sendmail/welcome/en')
+      .set('Authorization', authKey)
       .send({
         to: 'toto@test.com',
         substitutions: {
@@ -76,6 +111,7 @@ describe('Sending emails through SMTP', function() {
   it('throws if there is no template available for email subject', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/nosubject/fr')
+      .set('Authorization', authKey)
       .send({
         to: 'toto@test.com',
         substitutions: {
@@ -89,6 +125,7 @@ describe('Sending emails through SMTP', function() {
   it('throws if substitution variables are missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
+      .set('Authorization', authKey)
       .send({
         to: 'toto@test.com'
       })
@@ -98,6 +135,7 @@ describe('Sending emails through SMTP', function() {
   it('throws if recipient is missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
+      .set('Authorization', authKey)
       .send({
         substitutions: {
           name: 'toto',
@@ -125,6 +163,7 @@ describe('Sending emails through SMTP', function() {
       const subs = lodash.cloneDeep(substitutions);
       const result = await request(app.server.expressApp)
         .post('/sendmail/' + template)
+        .set('Authorization', authKey)
         .send({
           to: recipient,
           substitutions: subs

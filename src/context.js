@@ -26,6 +26,7 @@ class Context {
     const templatesConfig = settings.get('templates');
     
     this.defaultLang = templatesConfig.defaultLang;
+    this.authKey = settings.get('http.auth');
     
     this.mailing = new mailing({
       message: emailConfig,

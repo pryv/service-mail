@@ -7,6 +7,10 @@ async function sendMail(ctx, req, res) {
   const template = req.params.template;
   const substitutions = req.body.substitutions;
   const recipient = req.body.to;
+  
+  if(req.headers['authorization'] !== ctx.authKey) {
+    throw new Error('Not authorized.');
+  }
 
   // If params are not there, abort. 
   // TODO: use custom errors through factory?
