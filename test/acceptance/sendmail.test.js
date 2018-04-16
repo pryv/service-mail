@@ -16,7 +16,8 @@ describe('Sending emails through SMTP', function() {
   before(async () => {
     const overrideSettings = {
       templates: {
-        root: fixture_path('templates')
+        root: fixture_path('templates'),
+        defaultLang: 'fr'
       }
     };
     app = await new Application().setup(overrideSettings);
@@ -40,9 +41,41 @@ describe('Sending emails through SMTP', function() {
       .expect(200);
   });
   
-  it('throws if there is no template available', async () => {
+  it('throws if there is no template available for email content', async () => {
     await request(app.server.expressApp)
-      .post('/sendmail/notFound/eo')
+      .post('/sendmail/nocontent/fr')
+      .send({
+        to: 'toto@test.com',
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        }
+      })
+      .expect(500);
+  });
+  
+  it('chooses default language (fr) if there is no template available for requested language (en)', async () => {
+    const result = await request(app.server.expressApp)
+      .post('/sendmail/welcome/en')
+      .send({
+        to: 'toto@test.com',
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        }
+      })
+      .expect(200);
+      
+      const emailBody = result.body;
+      assert.isNotNull(emailBody);
+      emailContent = JSON.parse(emailBody.message);
+      const frenchWord = 'bonjour';
+      assert.include(emailContent.subject, frenchWord);
+  });
+  
+  it('throws if there is no template available for email subject', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/nosubject/fr')
       .send({
         to: 'toto@test.com',
         substitutions: {
@@ -98,10 +131,11 @@ describe('Sending emails through SMTP', function() {
         })
         .expect(200);
         assert.isNotNull(result);
-        assert.isNotNull(result.body);
-        emailEnvelope = result.body.envelope;
+        const emailBody = result.body;
+        assert.isNotNull(emailBody);
+        emailEnvelope = emailBody.envelope;
         assert.isNotNull(emailEnvelope);
-        emailContent = JSON.parse(result.body.message);
+        emailContent = JSON.parse(emailBody.message);
         assert.isNotNull(emailContent);
     });
     

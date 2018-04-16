@@ -47,7 +47,8 @@ class Settings {
         port: 9000
       },
       templates: {
-        root: path.resolve('templates')
+        root: path.resolve('templates'),
+        defaultLang: 'en'
       }
     };
   }

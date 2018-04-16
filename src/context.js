@@ -25,6 +25,8 @@ class Context {
         
     const templatesConfig = settings.get('templates');
     
+    this.defaultLang = templatesConfig.defaultLang;
+    
     this.mailing = new mailing({
       message: emailConfig,
       views: templatesConfig,
