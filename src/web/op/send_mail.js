@@ -3,8 +3,7 @@
  */
 async function sendMail(ctx, req, res) {
   
-  const template = req.params.template;
-  const lang = req.params.lang;
+  const template = [req.params.template, req.params.lang].join('/')
   const substitutions = req.body.substitutions;
   const recipient = req.body.to;
 
@@ -14,10 +13,17 @@ async function sendMail(ctx, req, res) {
   if (recipient == null) throw new Error('Missing recipient email address.');
   
   const mailing = ctx.mailing;
+  
+  const htmlTemplateExists = await mailing.templateExists(template+'/html.pug');
+  const textTemplateExists = await mailing.templateExists(template+'/text.pug');
+  if(htmlTemplateExists === false && textTemplateExists === false) {
+    // TODO: take another default template
+    throw new Error('No existing template found for: ' + template);
+  }
     
   const result = await mailing.send({
     message: {to: recipient},
-    template: [template, lang].join('/'),
+    template: template,
     locals: substitutions
   });
   

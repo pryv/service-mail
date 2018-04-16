@@ -53,18 +53,6 @@ describe('Sending emails through SMTP', function() {
       .expect(500);
   });
   
-  it('throws if some substitution variables are not provided', async () => {
-    await request(app.server.expressApp)
-      .post('/sendmail/welcome/fr')
-      .send({
-        to: 'toto@test.com',
-        substitutions: {
-          name: 'toto'
-        }
-      })
-      .expect(500);
-  });
-  
   it('throws if substitution variables are missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
