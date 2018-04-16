@@ -32,7 +32,7 @@ class Context {
       message: emailConfig,
       views: templatesConfig,
       transport: transportConfig,
-      preview: false // If true, it will open a webpage with a preview
+      preview: false, // If true, it will open a webpage with a preview
     });
   }
   

@@ -9,9 +9,9 @@ const path = require('path');
 
 const Application = require('../../src/application');
 
+const authKey = 'adminKey';
+
 describe('Sending emails through SMTP', function() {
-  
-  const authKey = 'adminKey';
   
   // Run the app
   let app;
@@ -206,6 +206,46 @@ describe('Sending emails through SMTP', function() {
       }
     });
     
+  });
+});
+
+describe('Sending emails through sendmail command', function() {
+
+  // Run the app
+  let app;
+  before(async () => {
+    const overrideSettings = {
+      templates: {
+        root: fixture_path('templates')
+      },
+      http: {
+        auth: authKey
+      },
+      sendmail: {
+        active: true,
+        path: 'sendmail'
+      }
+    };
+    app = await new Application().setup(overrideSettings);
+    await app.run(); 
+  });
+  
+  after(async () => {
+    await app.close(); 
+  });
+
+  it('answers 200 OK', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/welcome/fr')
+      .set('Authorization', authKey)
+      .send({
+        to: 'toto@test.com',
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        }
+      })
+      .expect(200);
   });
 });
 
