@@ -5,6 +5,7 @@ const chai = require('chai');
 const assert = chai.assert; 
 const request = require('supertest');
 const lodash = require('lodash');
+const path = require('path');
 
 const Application = require('../../src/application');
 
@@ -26,76 +27,126 @@ describe('Sending emails through SMTP', function() {
     app.server.stop(); 
   });
 
-  it('should send valid welcome email', async function () {
+  it('should answers 200 OK', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/welcome/fr')
+      .send({
+        to: 'toto@test.com',
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        }
+      })
+      .expect(200);
+  });
+  
+  it('throws if there is no template available', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/notFound/eo')
+      .send({
+        to: 'toto@test.com',
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        }
+      })
+      .expect(500);
+  });
+  
+  it('throws if some substitution variables are not provided', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/welcome/fr')
+      .send({
+        to: 'toto@test.com',
+        substitutions: {
+          name: 'toto'
+        }
+      })
+      .expect(500);
+  });
+  
+  it('throws if substitution variables are missing', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/welcome/fr')
+      .send({
+        to: 'toto@test.com'
+      })
+      .expect(500);
+  });
+  
+  it('throws if recipient is missing', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/welcome/fr')
+      .send({
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        }
+      })
+      .expect(500);
+  });
+  
+  describe('Validation of the sent email', async () => {
     
+    const template = 'welcome/fr';
     const recipient = 'toto@test.com';
     const substitutions = {
       name: 'toto',
       surname: 'yota'
     };
     
-    // NOTE: For some reason, email-templates library is adding
-    // properties to the substitutions object we pass as parameter here.
-    // Thus we clone it so that the original substitutions stay untouched.
-    const subs = lodash.cloneDeep(substitutions);
-    const emailInfo = await request(app.server.expressApp)
-      .post('/sendmail/welcome/fr')
-      .send({
-        to: recipient,
-        substitutions: subs
-      })
-      .expect(200);
-    return emailValidation(emailInfo, recipient, substitutions);
-  });
-  
-  it('throws if there is no template available', async () => {
-    assert.throws(async () => {
-      const template = "notFound/eo";
-      // TODO: sendmail
+    // Send a test email
+    let emailEnvelope, emailContent;
+    before(async () => {
+      // NOTE: For some reason, email-templates library is adding
+      // properties to the substitutions object we pass as parameter here.
+      // Thus we clone it so that the original substitutions stay untouched.
+      const subs = lodash.cloneDeep(substitutions);
+      const result = await request(app.server.expressApp)
+        .post('/sendmail/' + template)
+        .send({
+          to: recipient,
+          substitutions: subs
+        })
+        .expect(200);
+        assert.isNotNull(result);
+        assert.isNotNull(result.body);
+        emailEnvelope = result.body.envelope;
+        assert.isNotNull(emailEnvelope);
+        emailContent = JSON.parse(result.body.message);
+        assert.isNotNull(emailContent);
     });
-  });
-  
-  it('throws if some substitution variables are not provided', async () => {
-    assert.throws(async () => {
-      const substitutions = {};
-      // TODO: sendmail
+    
+    it('has a valid envelope (from/to)', async () => {
+      const expectedFrom = app.settings.get('email.from');
+      assert.isNotNull(emailEnvelope.to);
+      assert.strictEqual(emailEnvelope.to.length, 1);
+      assert.strictEqual(emailEnvelope.to[0], recipient);
+      assert.strictEqual(emailEnvelope.from, expectedFrom);
     });
+    
+    it('has a valid content (subject/text/html)', async () => {
+      assert.isNotNull(emailContent.subject);
+      assert.isNotNull(emailContent.text);
+      assert.isNotNull(emailContent.html);
+    });
+    
+    it('is written in the correct language (french)', async () => {
+      const frenchWord = 'bonjour';
+      assert.include(emailContent.subject, frenchWord);
+      assert.include(emailContent.text, frenchWord);
+      assert.include(emailContent.html, frenchWord);
+    });
+    
+    it('contains all the substituted variables', async () => {
+      for (sub of Object.values(substitutions)) {
+        assert.include(emailContent.text, sub);
+        assert.include(emailContent.html, sub);
+      }
+    });
+    
   });
-  
-  function emailValidation(result, to, subs) {
-    const email = result.body;
-    assert.isNotNull(email);
-    
-    // Validate that email was sent from/to the right sender/recipient
-    const envelope = email.envelope;
-    const expectedFrom = app.settings.get('email.from');
-    assert.isNotNull(envelope);
-    assert.isNotNull(envelope.to);
-    assert.strictEqual(envelope.to.length, 1);
-    assert.strictEqual(envelope.to[0], to);
-    assert.strictEqual(envelope.from, expectedFrom);
-    
-    // Validate email content
-    const content = JSON.parse(email.message);
-    assert.isNotNull(content.subject);
-    assert.isNotNull(content.text);
-    assert.isNotNull(content.html);
-    
-    // Validate email language (fr)
-    const frenchWord = 'bonjour';
-    assert.include(content.subject, frenchWord);
-    assert.include(content.text, frenchWord);
-    assert.include(content.html, frenchWord);
-    
-    // Validate email subsitution of variables
-    for (sub of Object.values(subs)) {
-      assert.include(content.text, sub);
-      assert.include(content.html, sub);
-    }
-  }
 });
-
-const path = require('path');
 
 function fixture_path(...fragments) {
   return path.join(__dirname, '../fixtures', ...fragments);
