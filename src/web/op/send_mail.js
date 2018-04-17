@@ -7,8 +7,9 @@ async function sendMail(ctx, req, res) {
   const template = req.params.template;
   const substitutions = req.body.substitutions;
   const recipient = req.body.to;
-  
-  if(req.headers['authorization'] !== ctx.authKey) {
+  const key = req.body.key;
+
+  if(key !== ctx.authKey) {
     throw new Error('Not authorized.');
   }
 

@@ -1,7 +1,8 @@
 {
   http: {
     ip: 127.0.0.1,
-    port": 9000
+    port: 9000,
+    auth: prZ9WM1!p_QASy^kG%9tGPYQhTTKy)wS#Zt(Fv%cHD4O7XJfPx4K*9080ulr2^jA
   },
   logs: {
     console: {
