@@ -12,13 +12,15 @@ async function sendMail(ctx, req, res) {
   const key = req.body.key;
 
   if(key !== ctx.authKey) {
-    throw errors.forbidden('Authorization key is missing.');
+    throw errors.forbidden('Authorization key is missing or invalid.');
   }
 
   // If params are not there, abort. 
   if (substitutions == null) throw errors.invalidRequestStructure('Missing substitution variables.');
-  if (recipient == null) throw errors.invalidRequestStructure('Missing recipient email address.');
-  
+  if (recipient == null) throw errors.invalidRequestStructure('Missing recipient.');
+  if (recipient.email == null) throw errors.invalidRequestStructure('Missing recipient email.');
+  if (recipient.name == null) throw errors.invalidRequestStructure('Missing recipient name.');
+
   const mailing = ctx.mailing;
   
   const htmlTemplate = templatePath(template, lang, 'html.pug');
@@ -49,7 +51,12 @@ async function sendMail(ctx, req, res) {
   }
     
   const result = await mailing.send({
-    message: {to: recipient},
+    message: {
+      to: {
+        name: recipient.name,
+        address: recipient.email
+      }
+    },
     template: templatePath(template, lang),
     locals: substitutions
   });

@@ -29,8 +29,11 @@ class Settings {
       },
       // Default values for emails, each email sent will contain these
       email: {
-        // Default sender email address
-        from: "btvryvs5al5mjpa3@ethereal.email"
+        // Default sender name and email address
+        from: {
+          name: "Ethereal Email",
+          address: "btvryvs5al5mjpa3@ethereal.email"
+        }
       },
       // By default, the service-mail will use SMTP as transport
       smtp: {
