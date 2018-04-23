@@ -58,7 +58,7 @@ class Application {
   }
   
   initContext() {    
-    this.context = new Context(this.settings, this.logFactory('context'));
+    this.context = new Context(this.settings, this.logFactory);
     
     assert(this.context != null, 'AF: context init has succeeded');
     this.logger.info('Context initialized.');

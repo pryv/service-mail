@@ -1,7 +1,9 @@
+const errors = require('../../errors');
 
 /** POST /sendmail/welcome - Send a welcome email. 
  */
 async function sendMail(ctx, req, res) {
+  const logger = ctx.logFactory('sendmail');
   
   let lang = req.params.lang;
   const template = req.params.template;
@@ -10,40 +12,40 @@ async function sendMail(ctx, req, res) {
   const key = req.body.key;
 
   if(key !== ctx.authKey) {
-    throw new Error('Not authorized.');
+    throw errors.forbidden('Authorization key is missing.');
   }
 
   // If params are not there, abort. 
-  // TODO: use custom errors through factory?
-  if (substitutions == null) throw new Error('Missing substitution variables.');
-  if (recipient == null) throw new Error('Missing recipient email address.');
+  if (substitutions == null) throw errors.invalidRequestStructure('Missing substitution variables.');
+  if (recipient == null) throw errors.invalidRequestStructure('Missing recipient email address.');
   
   const mailing = ctx.mailing;
   
   const htmlTemplate = templatePath(template, lang, 'html.pug');
+  const defaultTemplate = templatePath(template, ctx.defaultLang, 'html.pug');
   let templateFound = await mailing.templateExists(htmlTemplate);
 
   // No template found for requested language, trying with default language
   if(templateFound === false) {
     if(ctx.defaultLang != null) {
-      const defaultTemplate = templatePath(template, ctx.defaultLang, 'html.pug');
       const defaultTemplateExists = await mailing.templateExists(defaultTemplate);
       if(defaultTemplateExists !== false) {
         lang = ctx.defaultLang;
         templateFound = true;
+        logger.warn(`Template not found: ${htmlTemplate}, using default language: ${defaultTemplate}`);
       }
     }
   }
   
   // Still no template found, give up
   if(templateFound === false) {
-    throw new Error(`No available template found for content: ${templatePath(template, lang)}`);
+    throw errors.unknownResource(`Template not found: ${htmlTemplate}, default language not found neither: ${defaultTemplate}`);
   }
   
-  const subject = templatePath(template, lang, 'subject.pug');
-  const subjectTemplateExists = await mailing.templateExists(subject);
+  const subjectTemplate = templatePath(template, lang, 'subject.pug');
+  const subjectTemplateExists = await mailing.templateExists(subjectTemplate);
   if(subjectTemplateExists === false) {
-    throw new Error(`No available template found for subject: ${subject}`);
+    throw errors.unknownResource(`Template not found : ${subjectTemplate}`);
   }
     
   const result = await mailing.send({
@@ -51,6 +53,8 @@ async function sendMail(ctx, req, res) {
     template: templatePath(template, lang),
     locals: substitutions
   });
+  
+  logger.info('Email sent:', result);
   
   res
     .status(200)

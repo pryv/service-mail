@@ -7,12 +7,16 @@ const lodash = require('lodash');
 // 
 class Context {
   
-  constructor(settings, logger) {
+  constructor(settings, logFactory) {
+
+    const logger = logFactory('context');
+
     const emailConfig= settings.get('email');
     
     let transportConfig;
     // Using sendmail command as transport
     if(settings.get('sendmail.active')) {
+      logger.info('Using sendmail command to send emails.');
       transportConfig = {
         sendmail: true,
         path: settings.get('sendmail.path')
@@ -20,19 +24,21 @@ class Context {
     }
     // Using SMTP as transport
     else {
+      logger.info('Using SMTP to send emails.');
       transportConfig = settings.get('smtp');
     }
         
     const templatesConfig = settings.get('templates');
     
+    this.logFactory = logFactory;
     this.defaultLang = templatesConfig.defaultLang;
     this.authKey = settings.get('http.auth');
-    
     this.mailing = new mailing({
       message: emailConfig,
       views: templatesConfig,
       transport: transportConfig,
-      preview: false, // If true, it will open a webpage with a preview
+      preview: true, // If true, it will open a webpage with a preview
+      send: false // Do not actually send the emails (for test env)
     });
   }
   

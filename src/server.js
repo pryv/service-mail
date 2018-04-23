@@ -89,7 +89,8 @@ class Server {
       res
         .status(err.httpStatus || 500)
         .json({
-          error: err,
+          error: err.message,
+          data: err.data,
           request: req.body
         });
     });

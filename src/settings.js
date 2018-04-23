@@ -30,7 +30,7 @@ class Settings {
       // Default values for emails, each email sent will contain these
       email: {
         // Default sender email address
-        from: "no-reply@pryv.com"
+        from: "btvryvs5al5mjpa3@ethereal.email"
       },
       // By default, the service-mail will use SMTP as transport
       smtp: {
