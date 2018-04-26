@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const yargs = require('yargs');
-const path = require('yargs');
+const path = require('path');
 
 const logging = require('./logging');
 const Context = require('./context');
