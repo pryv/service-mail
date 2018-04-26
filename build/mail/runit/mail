@@ -4,6 +4,7 @@ set -e
 
 cd /app/bin
 
+chown -R app:app /app/data/
 chown -R app:app /app/log/
 
 export NODE_ENV=production
