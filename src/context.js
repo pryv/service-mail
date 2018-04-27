@@ -37,8 +37,8 @@ class Context {
       message: emailConfig,
       views: templatesConfig,
       transport: transportConfig,
-      preview: true, // If true, it will open a webpage with a preview
-      send: false // Do not actually send the emails (for test env)
+      preview: false, // If true, it will open a webpage with a preview
+      send: true // Activate/deactivate the actual sending (prod/test env)
     });
   }
   
