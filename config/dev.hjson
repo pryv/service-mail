@@ -1,0 +1,21 @@
+{
+  http: {
+    ip: 127.0.0.1,
+    port: 9000,
+    auth: prZ9WM1!p_QASy^kG%9tGPYQhTTKy)wS#Zt(Fv%cHD4O7XJfPx4K*9080ulr2^jA
+  },
+  logs: {
+    console: {
+      active: true,
+      level: info
+    }
+  },
+  smtp: {
+    host: smtp.sendgrid.net,
+    port: 587,
+    auth: {
+      user: apikey,
+      pass": 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
+    }
+  }
+}
