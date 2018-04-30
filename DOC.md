@@ -8,6 +8,11 @@ Request the sending of an email.
 Template request parameter defines the type of email (e.g. welcome).
 Lang request parameter defines the language in which the email should be written.
 
+Each request should contain the following body parameters:
+- Substitutions: a mapping of variables that will be substituted in the email (e.g. name of the receiver)
+- To: information about the recipient (name, email address)
+- Key: shared key used to authenticate the requesting service against the mail service
+
 ## Templates
 
 The root folder where to look for templates can be defined in configuration by providing: 'templates.root'.
