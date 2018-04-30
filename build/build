@@ -40,6 +40,6 @@ popd
 echo "---------------------------- building mail ------------------------------"
 pushd mail
 cp ../release.tar .
-sudo docker build -f Dockerfile -t pryv/mail:1.0.0 .
+sudo docker build -f Dockerfile -t pryv/mail:$version .
 release "pryv/mail" $version
 popd
