@@ -13,7 +13,7 @@ async function sendMail(ctx, req, res) {
 
   // If requested service is not authenticated, abort. 
   if(key !== ctx.authKey) {
-    throw errors.forbidden('Authorization key is missing or invalid.' + key +'-'+ctx.authKey);
+    throw errors.forbidden('Authorization key is missing or invalid.');
   }
 
   // If params are not there, abort. 
