@@ -29,11 +29,15 @@ class Settings {
       },
       // Default values for emails, each email sent will contain these
       email: {
-        // Default sender name and email address
-        from: {
-          name: "Ethereal Email",
-          address: "btvryvs5al5mjpa3@ethereal.email"
-        }
+        message: {
+          // Default sender name and email address
+          from: {
+            name: "Ethereal Email",
+            address: "btvryvs5al5mjpa3@ethereal.email"
+          }
+        },
+        preview: false, // If true, it will open a webpage with a preview
+        send: true // Activate/deactivate the actual sending (prod/test env)
       },
       // By default, the service-mail will use SMTP as transport
       smtp: {
@@ -61,7 +65,8 @@ class Settings {
         port: 9000,
         // Each sendmail request should contain authorization header that
         // matches this key, used to prevent abuse.
-        auth: "CHANGEME"
+        auth: "CHANGEME",
+        
       },
       templates: {
         // Root folder where the templates are stored

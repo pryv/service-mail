@@ -23,6 +23,9 @@ describe('Sending emails through SMTP', function() {
       },
       http: {
         auth: authKey
+      },
+      email: {
+        send: false
       }
     };
     app = await new Application().setup(overrideSettings);
@@ -36,13 +39,16 @@ describe('Sending emails through SMTP', function() {
   it('answers 200 OK', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
-      .set('Authorization', authKey)
       .send({
-        to: 'toto@test.com',
+        to: {
+          name: 'toto',
+          email: 'toto@test.com'
+        },
         substitutions: {
           name: 'toto',
           surname: 'yota'
-        }
+        },
+        key: authKey
       })
       .expect(200);
   });
@@ -51,58 +57,71 @@ describe('Sending emails through SMTP', function() {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
       .send({
-        to: 'toto@test.com',
+        to: {
+          name: 'toto',
+          email: 'toto@test.com'
+        },
         substitutions: {
           name: 'toto',
           surname: 'yota'
         }
       })
-      .expect(500);
+      .expect(403);
   });
   
   it('throws if authorization key is invalid', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
-      .set('Authorization', 'notvalid')
       .send({
-        to: 'toto@test.com',
+        to: {
+          name: 'toto',
+          email: 'toto@test.com'
+        },
         substitutions: {
           name: 'toto',
           surname: 'yota'
-        }
+        },
+        key: 'notvalid'
       })
-      .expect(500);
+      .expect(403);
   });
   
   it('throws if there is no template available for email content', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/nocontent/fr')
-      .set('Authorization', authKey)
       .send({
-        to: 'toto@test.com',
+        to: {
+          name: 'toto',
+          email: 'toto@test.com'
+        },
         substitutions: {
           name: 'toto',
           surname: 'yota'
-        }
+        },
+        key: authKey
       })
-      .expect(500);
+      .expect(404);
   });
   
   it('chooses default language (fr) if there is no template available for requested language (en)', async () => {
     const result = await request(app.server.expressApp)
       .post('/sendmail/welcome/en')
-      .set('Authorization', authKey)
       .send({
-        to: 'toto@test.com',
+        to: {
+          name: 'toto',
+          email: 'toto@test.com'
+        },
         substitutions: {
           name: 'toto',
           surname: 'yota'
-        }
+        },
+        key: authKey
       })
       .expect(200);
       
       const emailBody = result.body;
       assert.isNotNull(emailBody);
+      assert.isNotNull(emailBody.message);
       emailContent = JSON.parse(emailBody.message);
       const frenchWord = 'bonjour';
       assert.include(emailContent.subject, frenchWord);
@@ -111,44 +130,85 @@ describe('Sending emails through SMTP', function() {
   it('throws if there is no template available for email subject', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/nosubject/fr')
-      .set('Authorization', authKey)
       .send({
-        to: 'toto@test.com',
+        to: {
+          name: 'toto',
+          email: 'toto@test.com'
+        },
         substitutions: {
           name: 'toto',
           surname: 'yota'
-        }
+        },
+        key: authKey
       })
-      .expect(500);
+      .expect(404);
   });
   
   it('throws if substitution variables are missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
-      .set('Authorization', authKey)
       .send({
-        to: 'toto@test.com'
+        to: {
+          name: 'toto',
+          email: 'toto@test.com'
+        },
+        key: authKey
       })
-      .expect(500);
+      .expect(400);
   });
   
   it('throws if recipient is missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
-      .set('Authorization', authKey)
       .send({
         substitutions: {
           name: 'toto',
           surname: 'yota'
-        }
+        },
+        key: authKey
       })
-      .expect(500);
+      .expect(400);
+  });
+  
+  it('throws if recipient email is missing', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/welcome/fr')
+      .send({
+        to: {
+          name: 'toto'
+        },
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        },
+        key: authKey
+      })
+      .expect(400);
+  });
+  
+  it('throws if recipient name is missing', async () => {
+    await request(app.server.expressApp)
+      .post('/sendmail/welcome/fr')
+      .send({
+        to: {
+          email: 'toto@test.com'
+        },
+        substitutions: {
+          name: 'toto',
+          surname: 'yota'
+        },
+        key: authKey
+      })
+      .expect(400);
   });
   
   describe('Validation of the sent email', async () => {
     
     const template = 'welcome/fr';
-    const recipient = 'toto@test.com';
+    const recipient = {
+      name: 'toto',
+      email: 'toto@test.com'
+    };
     const substitutions = {
       name: 'toto',
       surname: 'yota'
@@ -163,10 +223,10 @@ describe('Sending emails through SMTP', function() {
       const subs = lodash.cloneDeep(substitutions);
       const result = await request(app.server.expressApp)
         .post('/sendmail/' + template)
-        .set('Authorization', authKey)
         .send({
           to: recipient,
-          substitutions: subs
+          substitutions: subs,
+          key: authKey
         })
         .expect(200);
         assert.isNotNull(result);
@@ -174,16 +234,17 @@ describe('Sending emails through SMTP', function() {
         assert.isNotNull(emailBody);
         emailEnvelope = emailBody.envelope;
         assert.isNotNull(emailEnvelope);
+        assert.isNotNull(emailBody.message);
         emailContent = JSON.parse(emailBody.message);
         assert.isNotNull(emailContent);
     });
     
     it('has a valid envelope (from/to)', async () => {
-      const expectedFrom = app.settings.get('email.from');
+      const expectedFrom = app.settings.get('email.message.from');
       assert.isNotNull(emailEnvelope.to);
       assert.strictEqual(emailEnvelope.to.length, 1);
-      assert.strictEqual(emailEnvelope.to[0], recipient);
-      assert.strictEqual(emailEnvelope.from, expectedFrom);
+      assert.strictEqual(emailEnvelope.to[0], recipient.email);
+      assert.strictEqual(emailEnvelope.from, expectedFrom.address);
     });
     
     it('has a valid content (subject/text/html)', async () => {
@@ -224,6 +285,9 @@ describe('Sending emails through sendmail command', function() {
       sendmail: {
         active: true,
         path: 'sendmail'
+      },
+      email: {
+        send: false
       }
     };
     app = await new Application().setup(overrideSettings);
@@ -237,13 +301,16 @@ describe('Sending emails through sendmail command', function() {
   it('answers 200 OK', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
-      .set('Authorization', authKey)
       .send({
-        to: 'toto@test.com',
+        to: {
+          name: 'toto',
+          email: 'toto@test.com'
+        },
         substitutions: {
           name: 'toto',
           surname: 'yota'
-        }
+        },
+        key: authKey
       })
       .expect(200);
   });
