@@ -1,0 +1,2 @@
+# Procfile for launching api-server in production.
+api: bin/server --config /app/conf/mail.json --http-port $PORT

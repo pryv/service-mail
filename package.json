@@ -1,0 +1,36 @@
+{
+  "name": "smtp-example",
+  "version": "1.0.0",
+  "description": "Starting example for a customizable SMTP solution in Pryv",
+  "main": "src/server.js",
+  "author": "Modoux Thiébaud",
+  "license": "MIT",
+  "scripts": {
+    "start": "./bin/server",
+    "test": "node_modules/.bin/mocha test/**/*.test.js"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "convict": "^4.2.0",
+    "email-templates": "^3.5.2",
+    "express": "^4.16.3",
+    "hjson": "^3.1.1",
+    "http": "^0.0.0",
+    "js-yaml": "^3.11.0",
+    "nodemailer": "^4.6.4",
+    "path": "^0.12.7",
+    "pug": "^2.0.3",
+    "superagent": "^3.8.2",
+    "url": "^0.11.0",
+    "winston": "^2.4.1",
+    "yargs": "^11.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.9.0",
+    "mocha": "^5.0.5",
+    "supertest": "^3.0.0",
+    "node-foreman": "git://github.com/pryv/node-foreman.git#4eb501d443432878491b2d0387ded96e7c4154d0"
+  }
+}

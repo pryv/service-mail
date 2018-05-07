@@ -1,0 +1,39 @@
+{
+  "logs": {
+    "prefix": "",
+    "console": { 
+      "active": true,
+      "level": "info",
+      "colorize": true 
+    }, 
+    "file": {
+      "active": false
+    }
+  },
+  "email": {
+    "from": {
+      "name": "Ethereal",
+      "address": "btvryvs5al5mjpa3@ethereal.email"
+    }
+  },
+  "smtp": {
+    "host": "smtp.ethereal.email",
+    "port": 587,
+    "auth": {
+      "user": "btvryvs5al5mjpa3@ethereal.email",
+      "pass": "VfNxJctkjrURkyThZr"
+    }
+  },
+  "sendmail": {
+    "active": false,
+    "path": "sendmail"
+  },
+  "http": {
+    "ip": "127.0.0.1",
+    "port": 9000,
+    "auth": "CHANGEME"
+  },
+  "templates": {
+    "defaultLang": "en"
+  }
+}
