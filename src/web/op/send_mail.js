@@ -19,8 +19,11 @@ async function sendMail(ctx, req, res) {
   // If params are not there, abort. 
   if (substitutions == null) throw errors.invalidRequestStructure('Missing substitution variables.');
   if (recipient == null) throw errors.invalidRequestStructure('Missing recipient.');
-    
-  const result = await ctx.mailing.send(template, lang, substitutions, recipient);
+  if (recipient.email == null) throw errors.invalidRequestStructure('Missing recipient email.');
+  if (recipient.name == null) throw errors.invalidRequestStructure('Missing recipient name.');
+  
+  const loadedTemplate = await ctx.templateRepository.find(template, lang);
+  const result = await ctx.sender.renderAndSend(loadedTemplate, substitutions, recipient);
   
   logger.info('Email sent:', result);
   
