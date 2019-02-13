@@ -46,6 +46,7 @@ class Settings {
         // SMTP port
         port: 587,
         // Credentials to authenticate against external service
+        // By default, it uses Ethereal, a fake SMTP service
         auth: {
           user: "btvryvs5al5mjpa3@ethereal.email",
           pass: "VfNxJctkjrURkyThZr"
