@@ -11,7 +11,7 @@ run rm -r /etc/service/sshd && rm /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # Install and setup sendmail
 minimal_apt_get_install sendmail
-run /pd_build/sendmail.sh
+run yes 'Y' | sendmailconfig
 
 # Clean up after ourselves.
 run /pd_build/finalize.sh
