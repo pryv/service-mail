@@ -7,6 +7,8 @@ cd /app/bin
 chown -R app:app /app/data/
 chown -R app:app /app/log/
 
+echo "127.0.0.1 localhost localhost.localdomain $HOSTNAME" >> /etc/hosts && yes 'Y' | sendmailconfig 
+
 export NODE_ENV=production
 export NODE_PATH=/app/bin/
 exec chpst -u app /app/bin/node_modules/.bin/nf -j production.procfile \
