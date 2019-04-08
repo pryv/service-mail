@@ -85,7 +85,7 @@ Here is a sample configuration that shows all available settings alongside with 
     // Will replace SMTP transport if set to true
     active: false,
     // Path of the sendmail command on the machine
-    path: 'sendmail'
+    path: '/usr/sbin/sendmail'
   },
   http: {
     // IP address on which the mailing server is listening

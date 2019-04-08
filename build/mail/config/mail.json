@@ -26,7 +26,7 @@
   },
   "sendmail": {
     "active": false,
-    "path": "sendmail"
+    "path": "/usr/sbin/sendmail"
   },
   "http": {
     "ip": "127.0.0.1",
