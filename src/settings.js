@@ -45,12 +45,14 @@ class Settings {
         host: "smtp.ethereal.email",
         // SMTP port
         port: 587,
-        // Credentials to authenticate against external service
-        // By default, it uses Ethereal, a fake SMTP service
+        /* Credentials to authenticate against external service
+        /  We do not set default values here since it prevents
+        /  configuring SMTP server with authentication deactivated
         auth: {
           user: "btvryvs5al5mjpa3@ethereal.email",
           pass: "VfNxJctkjrURkyThZr"
         }
+        */
       },
       // Alternative transport, using the sendmail command of the machine
       sendmail: {
