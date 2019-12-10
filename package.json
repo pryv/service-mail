@@ -1,6 +1,6 @@
 {
   "name": "smtp-example",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Starting example for a customizable SMTP solution in Pryv",
   "main": "src/server.js",
   "author": "Modoux Thiébaud",
