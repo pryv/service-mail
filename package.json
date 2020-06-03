@@ -1,12 +1,12 @@
 {
   "name": "smtp-example",
-  "version": "1.2.0",
-  "description": "Starting example for a customizable SMTP solution in Pryv",
+  "version": "1.2.1",
+  "description": "Customizable SMTP solution in Pryv.io that mocks Mandrill's API",
   "main": "src/server.js",
-  "author": "Modoux Thiébaud",
+  "author": "Pryv S.A.",
   "license": "MIT",
   "scripts": {
-    "start": "./bin/server",
+    "start": "./bin/server --config ./config.hjson",
     "test": "node_modules/.bin/mocha test/**/*.test.js"
   },
   "dependencies": {
