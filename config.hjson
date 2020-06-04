@@ -42,11 +42,12 @@
     port: 9000,
     // Each sendmail request should contain authorization header that
     // matches this key, used to prevent abuse.
-    auth: "CHANGEME",
+    // No need to change if ip adress is not facing the internet.
+    auth: "SHOULD_MATCH_SERVICE_MAIL",
   },
   templates: {
     // Root folder where the templates are stored
-    root: '/templates/',
+    root: './templates/',
     // Default language for templates
     defaultLang: 'en'
   }

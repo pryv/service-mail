@@ -33,7 +33,7 @@ class Settings {
           // Default sender name and email address
           from: {
             name: "Ethereal Email",
-            address: "btvryvs5al5mjpa3@ethereal.email"
+            address: "changeme@ethereal.email"
           }
         },
         preview: false, // If true, it will open a webpage with a preview
@@ -57,7 +57,7 @@ class Settings {
       // Alternative transport, using the sendmail command of the machine
       sendmail: {
         // Will replace SMTP transport if set to true
-        active: false,
+        active: true,
         // Path of the sendmail command on the machine
         path: '/usr/sbin/sendmail'
       },
@@ -68,7 +68,7 @@ class Settings {
         port: 9000,
         // Each sendmail request should contain authorization header that
         // matches this key, used to prevent abuse.
-        auth: "CHANGEME",
+        auth: "SHOULD_MATCH_SERVICE_MAIL",
         
       },
       templates: {
