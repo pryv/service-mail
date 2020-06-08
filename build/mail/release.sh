@@ -25,10 +25,6 @@ PYTHON=$(which python2.7) run yarn install
 # Install the config file
 run mkdir -p $conf_dir && \
   run cp /pd_build/config/mail.json $conf_dir/mail.json
-  
-# Install the procfile (for running node-foreman)
-run cp /pd_build/config/production.procfile \
-  production.procfile
 
 # Create the log
 run mkdir -p $log_dir && \
