@@ -8,15 +8,13 @@ set -e
 scripts/build_name
 version=$(cat build_tag)
 
-# Create a release.tar that contains all the code. 
-pushd ..
-tar cf build/release.tar \
-  --exclude .git \
-  --exclude node_modules \
-  --exclude */node_modules \
+mkdir bin
+rsync -a ../ bin \
+  --exclude .github \
   --exclude build \
-  .
-popd
+  --exclude config \
+  --exclude test \
+  --exclude .gitignore
 
 host='eu.gcr.io'
 
