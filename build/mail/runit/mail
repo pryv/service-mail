@@ -4,7 +4,6 @@ set -e
 
 cd /app/bin
 
-chown -R app:app /app/data/
 chown -R app:app /app/log/
 
 # Setup sendmail (at startup because it depends on current container hostname)

@@ -8,7 +8,7 @@ set -e
 scripts/build_name
 version=$(cat build_tag)
 
-mkdir bin
+mkdir -p mail/bin
 rsync -a ../ bin \
   --exclude .github \
   --exclude build \
