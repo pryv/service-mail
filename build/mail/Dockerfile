@@ -33,7 +33,7 @@ RUN rm -r /etc/service/cron
 RUN rm -r /etc/service/sshd && rm /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # Install sendmail
-RUN apt-get update && apt-get install -y --no-install-recommends sendmail
+RUN ["/bin/bash", "-c", "apt-get update && apt-get install -y --no-install-recommends sendmail"]
 
 # Cleanup
 RUN apt-get remove -y autoconf automake
