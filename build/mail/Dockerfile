@@ -14,6 +14,7 @@ ARG LOG_DIR="/app/log"
 RUN mkdir -p $TARGET_DIR
 RUN cp -r /pd_build/bin/ $TARGET_DIR
 RUN chown -R app $TARGET_DIR
+RUN yarn
 
 # Install the config file
 RUN mkdir -p $CONF_DIR

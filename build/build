@@ -10,6 +10,7 @@ version=$(cat build_tag)
 
 mkdir -p mail/bin
 rsync -a ../ bin \
+  --exclude node_modules \
   --exclude .github \
   --exclude build \
   --exclude config \
