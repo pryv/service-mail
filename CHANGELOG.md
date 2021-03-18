@@ -1,5 +1,13 @@
 ## 1.2
 
+### 1.2.2
+
+- Fix dependencies for security
+
+### 1.2.1
+
+- Cleanup for open-source release
+
 ### 1.2.0
 
 - Update node version to 12.13.1.
