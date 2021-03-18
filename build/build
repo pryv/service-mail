@@ -20,7 +20,6 @@ host='eu.gcr.io'
 
 echo "---------------------------- building mail ------------------------------"
 pushd mail
-cp ../release.tar .
 docker build -f Dockerfile -t $host/pryvio/mail:$version .
 docker push $host/pryvio/mail:$version
 popd
