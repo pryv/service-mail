@@ -1,5 +1,15 @@
 ## 1.2
 
+### 1.2.3
+
+Migrate to github actions CI:
+
+- cleanup Jenkins
+- migrate to GCP repository from bintray
+- simplify docker image build
+- remove tests and .git from image (among other things)
+- remove Node Foreman, as we use runit as process manager
+
 ### 1.2.2
 
 - Fix dependencies for security
