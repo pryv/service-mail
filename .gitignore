@@ -16,4 +16,4 @@ yarn-error.log
 build/build_tag
 build/mail/release.tar
 build/release.tar
-build/bin
+build/mail/bin
