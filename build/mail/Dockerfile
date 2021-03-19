@@ -19,6 +19,7 @@ RUN cd $TARGET_DIR && yarn
 # Install the config file
 RUN mkdir -p $CONF_DIR
 RUN cp /pd_build/config/mail.json $CONF_DIR/mail.json
+RUN cp /pd_build/config/production.procfile $CONF_DIR/production.procfile
 
 # Create the log
 RUN mkdir -p $LOG_DIR
