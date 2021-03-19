@@ -7,7 +7,7 @@ cd /app/bin
 chown -R app:app /app/log/
 
 # Setup sendmail (at startup because it depends on current container hostname)
-echo "127.0.0.1 localhost localhost.localdomain $HOSTNAME" >> /etc/hosts
+echo "127.0.0.1 localhost localhost.localdomain $HOSTNAME" >> /etc/hosts && yes 'Y' | sendmailconfig
 
 export NODE_ENV=production
 export NODE_PATH=/app/bin/
