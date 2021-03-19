@@ -9,7 +9,7 @@ scripts/build_name
 version=$(cat build_tag)
 
 mkdir -p mail/bin
-rsync -a ../ bin \
+rsync -a ../ mail/bin \
   --exclude node_modules \
   --exclude .github \
   --exclude build \
