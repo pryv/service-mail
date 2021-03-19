@@ -15,7 +15,8 @@ rsync -a ../ mail/bin \
   --exclude build \
   --exclude config \
   --exclude test \
-  --exclude .gitignore
+  --exclude .gitignore \
+  --exclude .git
 
 host='eu.gcr.io'
 
