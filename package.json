@@ -17,20 +17,20 @@
   "dependencies": {
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
-    "email-templates": "^7.0.5",
+    "email-templates": "^9.0.0",
     "express": "^4.17.1",
     "hjson": "^3.2.1",
-    "js-yaml": "^3.14.0",
-    "superagent": "^5.2.2",
-    "winston": "^2.4.1",
-    "yargs": "^11.0.0"
+    "js-yaml": "^4.1.0",
+    "superagent": "^7.1.6",
+    "winston": "^2.4.6",
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^7.0.2",
+    "mocha": "^10.0.0",
     "nyc": "^15.1.0",
     "semistandard": "^16.0.1",
     "source-licenser": "^2.0.5",
-    "supertest": "^4.0.2"
+    "supertest": "^6.2.3"
   }
 }

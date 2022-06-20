@@ -99,7 +99,7 @@ class Settings {
 
     let obj;
 
-    if (path.endsWith('.yaml')) { obj = YAML.safeLoad(text); } else { obj = Hjson.parse(text); }
+    if (path.endsWith('.yaml')) { obj = YAML.load(text); } else { obj = Hjson.parse(text); }
 
     lodash.merge(this.config, obj);
 
