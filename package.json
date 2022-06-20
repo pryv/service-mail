@@ -1,13 +1,18 @@
 {
   "name": "pryv-service-mail",
   "version": "1.2.1",
+  "private": true,
   "description": "Customizable SMTP solution in Pryv.io that mocks Mandrill's API",
+  "homepage": "https://pryv.com",
+  "license": "UNLICENSED",
+  "author": "Pryv S.A. <info@pryv.com> (https://pryv.com)",
   "main": "src/server.js",
-  "author": "Pryv S.A.",
-  "license": "MIT",
   "scripts": {
-    "test": "node_modules/.bin/mocha test/**/*.test.js",
-    "start": "./bin/server --config ./config.hjson"
+    "test": "echo 'This project doesn’t use npm scripts – enter `just` for the available development commands\n' && exit 1"
+  },
+  "resolutions": {
+    "**/pug": "^3.0.1",
+    "**/yargs-parser": "13.1.2"
   },
   "dependencies": {
     "bluebird": "^3.7.2",
@@ -24,10 +29,7 @@
     "chai": "^4.2.0",
     "mocha": "^7.0.2",
     "semistandard": "^16.0.1",
+    "source-licenser": "^2.0.5",
     "supertest": "^4.0.2"
-  },
-  "resolutions": {
-    "**/yargs-parser": "13.1.2",
-    "**/pug": "^3.0.1"
   }
 }
