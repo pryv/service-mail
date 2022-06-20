@@ -1,12 +1,17 @@
+/**
+ * @license
+ * Copyright (C) 2018–2022 Pryv S.A. https://pryv.com - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
 
 /**
  * The constructor to use for all errors within the API.
  */
 class APIError extends Error {
-  
-  constructor(id, message, status, data) {
-    super(); 
-    
+  constructor (id, message, status, data) {
+    super();
+
     this.id = id;
     this.message = message;
     this.httpStatus = status || 500;

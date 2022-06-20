@@ -1,24 +1,29 @@
-// Tests sending of emails.
+/**
+ * @license
+ * Copyright (C) 2018–2022 Pryv S.A. https://pryv.com - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
 
 /* global describe, it, before, after */
+
 const chai = require('chai');
-const assert = chai.assert; 
+const assert = chai.assert;
 const request = require('supertest');
 const lodash = require('lodash');
 const path = require('path');
 
-const Application = require('../../src/application');
+const Application = require('../../src/Application');
 
 const authKey = 'adminKey';
 
-describe('Sending emails through SMTP', function() {
-  
+describe('Sending emails through SMTP', function () {
   // Run the app
   let app;
   before(async () => {
     const overrideSettings = {
       templates: {
-        root: fixture_path('templates'),
+        root: fixturePath('templates'),
         defaultLang: 'fr'
       },
       http: {
@@ -29,11 +34,11 @@ describe('Sending emails through SMTP', function() {
       }
     };
     app = await new Application().setup(overrideSettings);
-    await app.run(); 
+    await app.run();
   });
-  
+
   after(async () => {
-    await app.close(); 
+    await app.close();
   });
 
   it('answers 200 OK', async () => {
@@ -52,7 +57,7 @@ describe('Sending emails through SMTP', function() {
       })
       .expect(200);
   });
-  
+
   it('throws if authorization key is missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
@@ -68,7 +73,7 @@ describe('Sending emails through SMTP', function() {
       })
       .expect(403);
   });
-  
+
   it('throws if authorization key is invalid', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
@@ -85,7 +90,7 @@ describe('Sending emails through SMTP', function() {
       })
       .expect(403);
   });
-  
+
   it('throws if there is no template available for email content', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/nocontent/fr')
@@ -102,7 +107,7 @@ describe('Sending emails through SMTP', function() {
       })
       .expect(404);
   });
-  
+
   it('chooses default language (fr) if there is no template available for requested language (en)', async () => {
     const result = await request(app.server.expressApp)
       .post('/sendmail/welcome/en')
@@ -118,15 +123,15 @@ describe('Sending emails through SMTP', function() {
         key: authKey
       })
       .expect(200);
-      
-      const emailBody = result.body;
-      assert.isNotNull(emailBody);
-      assert.isNotNull(emailBody.message);
-      emailContent = JSON.parse(emailBody.message);
-      const frenchWord = 'bonjour';
-      assert.include(emailContent.subject, frenchWord);
+
+    const emailBody = result.body;
+    assert.isNotNull(emailBody);
+    assert.isNotNull(emailBody.message);
+    const emailContent = JSON.parse(emailBody.message);
+    const frenchWord = 'bonjour';
+    assert.include(emailContent.subject, frenchWord);
   });
-  
+
   it('throws if there is no template available for email subject', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/nosubject/fr')
@@ -143,7 +148,7 @@ describe('Sending emails through SMTP', function() {
       })
       .expect(404);
   });
-  
+
   it('throws if substitution variables are missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
@@ -156,7 +161,7 @@ describe('Sending emails through SMTP', function() {
       })
       .expect(400);
   });
-  
+
   it('throws if recipient is missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
@@ -169,7 +174,7 @@ describe('Sending emails through SMTP', function() {
       })
       .expect(400);
   });
-  
+
   it('throws if recipient email is missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
@@ -185,7 +190,7 @@ describe('Sending emails through SMTP', function() {
       })
       .expect(400);
   });
-  
+
   it('throws if recipient name is missing', async () => {
     await request(app.server.expressApp)
       .post('/sendmail/welcome/fr')
@@ -201,9 +206,8 @@ describe('Sending emails through SMTP', function() {
       })
       .expect(400);
   });
-  
+
   describe('Validation of the sent email', async () => {
-    
     const template = 'welcome/fr';
     const recipient = {
       name: 'toto',
@@ -213,7 +217,7 @@ describe('Sending emails through SMTP', function() {
       name: 'toto',
       surname: 'yota'
     };
-    
+
     // Send a test email
     let emailEnvelope, emailContent;
     before(async () => {
@@ -229,16 +233,16 @@ describe('Sending emails through SMTP', function() {
           key: authKey
         })
         .expect(200);
-        assert.isNotNull(result);
-        const emailBody = result.body;
-        assert.isNotNull(emailBody);
-        emailEnvelope = emailBody.envelope;
-        assert.isNotNull(emailEnvelope);
-        assert.isNotNull(emailBody.message);
-        emailContent = JSON.parse(emailBody.message);
-        assert.isNotNull(emailContent);
+      assert.isNotNull(result);
+      const emailBody = result.body;
+      assert.isNotNull(emailBody);
+      emailEnvelope = emailBody.envelope;
+      assert.isNotNull(emailEnvelope);
+      assert.isNotNull(emailBody.message);
+      emailContent = JSON.parse(emailBody.message);
+      assert.isNotNull(emailContent);
     });
-    
+
     it('has a valid envelope (from/to)', async () => {
       const expectedFrom = app.settings.get('email.message.from');
       assert.isNotNull(emailEnvelope.to);
@@ -246,38 +250,36 @@ describe('Sending emails through SMTP', function() {
       assert.strictEqual(emailEnvelope.to[0], recipient.email);
       assert.strictEqual(emailEnvelope.from, expectedFrom.address);
     });
-    
+
     it('has a valid content (subject/text/html)', async () => {
       assert.isNotNull(emailContent.subject);
       assert.isNotNull(emailContent.text);
       assert.isNotNull(emailContent.html);
     });
-    
+
     it('is written in the correct language (french)', async () => {
       const frenchWord = 'bonjour';
       assert.include(emailContent.subject, frenchWord);
       assert.include(emailContent.text, frenchWord);
       assert.include(emailContent.html, frenchWord);
     });
-    
+
     it('contains all the substituted variables', async () => {
-      for (sub of Object.values(substitutions)) {
+      for (const sub of Object.values(substitutions)) {
         assert.include(emailContent.text, sub);
         assert.include(emailContent.html, sub);
       }
     });
-    
   });
 });
 
-describe('Sending emails through sendmail command', function() {
-
+describe('Sending emails through sendmail command', function () {
   // Run the app
   let app;
   before(async () => {
     const overrideSettings = {
       templates: {
-        root: fixture_path('templates')
+        root: fixturePath('templates')
       },
       http: {
         auth: authKey
@@ -291,11 +293,11 @@ describe('Sending emails through sendmail command', function() {
       }
     };
     app = await new Application().setup(overrideSettings);
-    await app.run(); 
+    await app.run();
   });
-  
+
   after(async () => {
-    await app.close(); 
+    await app.close();
   });
 
   it('answers 200 OK', async () => {
@@ -316,6 +318,6 @@ describe('Sending emails through sendmail command', function() {
   });
 });
 
-function fixture_path(...fragments) {
+function fixturePath (...fragments) {
   return path.join(__dirname, '../fixtures', ...fragments);
 }

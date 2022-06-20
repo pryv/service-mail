@@ -1,26 +1,32 @@
-// ----------------------------------------------- (sync) express error handling
+/**
+ * @license
+ * Copyright (C) 2018–2022 Pryv S.A. https://pryv.com - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
 
-function mount(ctx, handler) {
+// (sync) express error handling
+
+function mount (ctx, handler) {
   return catchAndNext(
-    handler.bind(null, ctx)); 
+    handler.bind(null, ctx));
 }
 
-function catchAndNext(handler) {
+function catchAndNext (handler) {
   return async (req, res, next) => {
     try {
       return await handler(req, res, next);
-    }
-    catch (err) {
+    } catch (err) {
       // TODO: parse error into API errors (remove stack trace, log)
       next(err);
     }
   };
 }
 
-// --------------------------------------------------------------------- factory
+// factory
 
 module.exports = function (ctx) {
   return {
-    sendMail: mount(ctx, require('./op/send_mail'))
+    sendMail: mount(ctx, require('./op/sendMail'))
   };
 };
