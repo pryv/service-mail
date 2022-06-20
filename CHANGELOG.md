@@ -1,5 +1,10 @@
 ## 1.2
 
+### 1.2.4
+
+- Refactor dev env
+- Update dependencies
+
 ### 1.2.3
 
 Migrate to github actions CI:
