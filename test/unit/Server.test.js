@@ -11,7 +11,7 @@ const chai = require('chai');
 const assert = chai.assert;
 const superagent = require('superagent');
 
-const Application = require('../../src/application');
+const Application = require('../../src/Application');
 
 describe('Server', function () {
   const request = superagent;

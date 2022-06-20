@@ -13,7 +13,7 @@ const request = require('supertest');
 const lodash = require('lodash');
 const path = require('path');
 
-const Application = require('../../src/application');
+const Application = require('../../src/Application');
 
 const authKey = 'adminKey';
 

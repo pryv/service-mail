@@ -11,7 +11,7 @@ const chai = require('chai');
 const assert = chai.assert;
 const path = require('path');
 
-const Settings = require('../../src/settings');
+const Settings = require('../../src/Settings');
 
 describe('Settings', () => {
   describe('loadFromFile(json_file_path)', () => {
