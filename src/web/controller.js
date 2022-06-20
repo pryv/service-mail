@@ -1,16 +1,15 @@
 // ----------------------------------------------- (sync) express error handling
 
-function mount(ctx, handler) {
+function mount (ctx, handler) {
   return catchAndNext(
-    handler.bind(null, ctx)); 
+    handler.bind(null, ctx));
 }
 
-function catchAndNext(handler) {
+function catchAndNext (handler) {
   return async (req, res, next) => {
     try {
       return await handler(req, res, next);
-    }
-    catch (err) {
+    } catch (err) {
       // TODO: parse error into API errors (remove stack trace, log)
       next(err);
     }

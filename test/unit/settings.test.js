@@ -1,33 +1,32 @@
 /* global describe, it, beforeEach */
 
 const chai = require('chai');
-const assert = chai.assert; 
+const assert = chai.assert;
 
 const Settings = require('../../src/settings');
 
 describe('Settings', () => {
-  
   describe('#loadFromFile(json_file_path)', () => {
-    let settings; 
+    let settings;
     beforeEach(() => {
-      settings = new Settings(); 
+      settings = new Settings();
     });
 
     it('loads settings from an extended JSON file', async () => {
-      await settings.loadFromFile(fixture_path('settings/extended.json'));
-      
+      await settings.loadFromFile(fixturePath('settings/extended.json'));
+
       const format = settings.get('format');
       assert.strictEqual(format, 'Normal JSON');
     });
     it('loads settings from an extended HJSON file', async () => {
-      await settings.loadFromFile(fixture_path('settings/extended.hjson'));
-      
+      await settings.loadFromFile(fixturePath('settings/extended.hjson'));
+
       const format = settings.get('format');
       assert.strictEqual(format, 'HJSON');
     });
     it('loads settings from an extended YAML file', async () => {
-      await settings.loadFromFile(fixture_path('settings/extended.yaml'));
-      
+      await settings.loadFromFile(fixturePath('settings/extended.yaml'));
+
       const format = settings.get('format');
       assert.strictEqual(format, 'YAML');
     });
@@ -36,6 +35,6 @@ describe('Settings', () => {
 
 const path = require('path');
 
-function fixture_path(...fragments) {
+function fixturePath (...fragments) {
   return path.join(__dirname, '../fixtures', ...fragments);
 }

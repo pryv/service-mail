@@ -25,14 +25,14 @@ module.exports = function (logsSettings) {
   // apply settings
 
   // (console transport is present by default)
-  let consoleSettings = winston['default'].transports.console;
-  consoleSettings.silent = ! logsSettings.console.active;
+  const consoleSettings = winston.default.transports.console;
+  consoleSettings.silent = !logsSettings.console.active;
   if (logsSettings.console.active) {
     consoleSettings.level = logsSettings.console.level;
     consoleSettings.colorize = logsSettings.console.colorize;
     consoleSettings.timestamp = logsSettings.console.timestamp || true;
   }
-  if (winston['default'].transports.file) {
+  if (winston.default.transports.file) {
     // in production env it seems winston already includes a file transport...
     winston.remove(winston.transports.File);
   }
@@ -49,8 +49,8 @@ module.exports = function (logsSettings) {
 
   // return singleton
 
-  var loggers = new Map(),
-      prefix = logsSettings.prefix;
+  const loggers = new Map();
+  const prefix = logsSettings.prefix;
   return {
     /**
      * Returns a logger for the given component. Keeps track of initialized
@@ -60,50 +60,52 @@ module.exports = function (logsSettings) {
      */
     getLogger: function (componentName) {
       const context = prefix + componentName;
-      
+
       // Return memoized instance if we have produced it before.
       const existingLogger = loggers.get(context);
       if (existingLogger) return existingLogger;
-      
-      // Construct a new instance. We're passing winston as a logger here. 
+
+      // Construct a new instance. We're passing winston as a logger here.
       const logger = new LoggerImpl(context, winston);
       loggers.set(context, logger);
-      
-      return logger; 
-    }, 
+
+      return logger;
+    }
   };
 };
 
 class LoggerImpl {
-  
   /**
    * Creates a new logger for the§ given component.
    *
    * @param {String} context
    * @constructor
    */
-  constructor(context, winstonLogger) {
+  constructor (context, winstonLogger) {
     this.messagePrefix = context ? '[' + context + '] ' : '';
     this.winstonLogger = winstonLogger;
   }
-  
-  debug(msg, metaData) {
+
+  debug (msg, metaData) {
     this.log('debug', msg, metaData);
   }
-  info(msg, metaData) {
+
+  info (msg, metaData) {
     this.log('info', msg, metaData);
   }
-  warn(msg, metaData) {
+
+  warn (msg, metaData) {
     this.log('warn', msg, metaData);
   }
-  error(msg, metaData) {
+
+  error (msg, metaData) {
     this.log('error', msg, metaData);
   }
-  
-  log(level, message, metaData) {
+
+  log (level, message, metaData) {
     const msg = this.messagePrefix + message;
     const meta = metaData ? JSON.stringify(metaData) : {};
-    
+
     this.winstonLogger[level](msg, meta);
   }
 }

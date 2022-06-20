@@ -3,10 +3,9 @@
  * The constructor to use for all errors within the API.
  */
 class APIError extends Error {
-  
-  constructor(id, message, status, data) {
-    super(); 
-    
+  constructor (id, message, status, data) {
+    super();
+
     this.id = id;
     this.message = message;
     this.httpStatus = status || 500;
