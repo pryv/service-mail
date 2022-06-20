@@ -14,7 +14,7 @@ ARG LOG_DIR="/app/log"
 RUN mkdir -p $TARGET_DIR
 RUN cp -a /pd_build/bin/. $TARGET_DIR
 RUN chown -R app $TARGET_DIR
-RUN cd $TARGET_DIR && yarn
+RUN cd $TARGET_DIR && npm ci
 
 # Install the config file
 RUN mkdir -p $CONF_DIR
@@ -43,4 +43,3 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN rm -rf /pd_build
 
 EXPOSE 9000
-
