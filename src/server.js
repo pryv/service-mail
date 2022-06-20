@@ -32,7 +32,7 @@ class Server {
 
     const ip = settings.get(KEY_IP);
     const port = settings.get(KEY_PORT);
-    this.baseUrl = `http://${ip}:${port}/`;
+    this.baseURL = `http://${ip}:${port}/`;
 
     this.logger.info('constructed.');
   }

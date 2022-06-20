@@ -4,9 +4,9 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
-// Tests sending of emails.
 
 /* global describe, it, before, after */
+
 const chai = require('chai');
 const assert = chai.assert;
 const request = require('supertest');

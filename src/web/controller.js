@@ -4,7 +4,8 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
-// ----------------------------------------------- (sync) express error handling
+
+// (sync) express error handling
 
 function mount (ctx, handler) {
   return catchAndNext(
@@ -22,10 +23,10 @@ function catchAndNext (handler) {
   };
 }
 
-// --------------------------------------------------------------------- factory
+// factory
 
 module.exports = function (ctx) {
   return {
-    sendMail: mount(ctx, require('./op/send_mail'))
+    sendMail: mount(ctx, require('./op/sendMail'))
   };
 };

@@ -4,15 +4,17 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
+
 /* global describe, it, beforeEach */
 
 const chai = require('chai');
 const assert = chai.assert;
+const path = require('path');
 
 const Settings = require('../../src/settings');
 
 describe('Settings', () => {
-  describe('#loadFromFile(json_file_path)', () => {
+  describe('loadFromFile(json_file_path)', () => {
     let settings;
     beforeEach(() => {
       settings = new Settings();
@@ -24,12 +26,14 @@ describe('Settings', () => {
       const format = settings.get('format');
       assert.strictEqual(format, 'Normal JSON');
     });
+
     it('loads settings from an extended HJSON file', async () => {
       await settings.loadFromFile(fixturePath('settings/extended.hjson'));
 
       const format = settings.get('format');
       assert.strictEqual(format, 'HJSON');
     });
+
     it('loads settings from an extended YAML file', async () => {
       await settings.loadFromFile(fixturePath('settings/extended.yaml'));
 
@@ -38,8 +42,6 @@ describe('Settings', () => {
     });
   });
 });
-
-const path = require('path');
 
 function fixturePath (...fragments) {
   return path.join(__dirname, '../fixtures', ...fragments);

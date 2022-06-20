@@ -5,7 +5,7 @@
  * Proprietary and confidential
  */
 const errors = require('../errors');
-const Template = require('./template.js').Template;
+const Template = require('./Template.js');
 
 class TemplateRepository {
   constructor (defaultLanguage, templateExists) {
@@ -37,6 +37,4 @@ class TemplateRepository {
   }
 }
 
-module.exports = {
-  TemplateRepository
-};
+module.exports = TemplateRepository;

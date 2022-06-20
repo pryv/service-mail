@@ -11,9 +11,9 @@ const yargs = require('yargs');
 const path = require('path');
 
 const logging = require('./logging');
-const Context = require('./context');
-const Settings = require('./settings');
-const Server = require('./server');
+const Context = require('./Context');
+const Settings = require('./Settings');
+const Server = require('./Server');
 
 /** The mailing application holds references to all subsystems and ties everything
  * together.

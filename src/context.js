@@ -5,8 +5,8 @@
  * Proprietary and confidential
  */
 const EmailTemplates = require('email-templates');
-const TemplateRepository = require('./mail/template_repository.js').TemplateRepository;
-const Sender = require('./mail/sender.js').Sender;
+const TemplateRepository = require('./mail/TemplateRepository.js');
+const Sender = require('./mail/Sender');
 
 // Application context object, holding references to all major subsystems. Once
 // the system is initialized, these instance references will not change anymore
@@ -56,4 +56,5 @@ class Context {
     });
   }
 }
+
 module.exports = Context;

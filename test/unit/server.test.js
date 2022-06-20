@@ -4,6 +4,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
+
 /* global describe, it, before, beforeEach, afterEach */
 
 const chai = require('chai');
@@ -22,12 +23,6 @@ describe('Server', function () {
     server = app.server;
   });
 
-  function toUrl (path) {
-    const baseUrl = server.baseUrl;
-
-    return new URL(path, baseUrl).href;
-  }
-
   it('can be constructed', function () {
     assert.isNotNull(server);
   });
@@ -42,12 +37,16 @@ describe('Server', function () {
 
     it('starts a http server on configured port', function () {
       // Now we should have a local server running.
-      const statusUrl = toUrl('/system/status');
-      const response = request.get(statusUrl);
+      const statusURL = toURL('/system/status');
+      const response = request.get(statusURL);
 
       return response.then((res) => {
         assert.strictEqual(res.status, 200);
       });
     });
   });
+
+  function toURL (path) {
+    return new URL(path, server.baseURL).href;
+  }
 });

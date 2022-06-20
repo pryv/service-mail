@@ -37,6 +37,4 @@ class SendOperation {
   }
 }
 
-module.exports = {
-  Sender
-};
+module.exports = Sender;
