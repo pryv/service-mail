@@ -1,5 +1,9 @@
 ## 1.2
 
+### 1.2.5
+
+- Fix broken `bin/server`
+
 ### 1.2.4
 
 - Refactor dev env
