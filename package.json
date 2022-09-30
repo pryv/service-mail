@@ -30,7 +30,7 @@
     "mocha": "^10.0.0",
     "nyc": "^15.1.0",
     "semistandard": "^16.0.1",
-    "source-licenser": "^2.0.5",
-    "supertest": "^6.2.3"
+    "supertest": "^6.2.3",
+    "source-licenser": "^2.0.5"
   }
 }
