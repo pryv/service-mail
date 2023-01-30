@@ -1,6 +1,6 @@
 {
   "name": "pryv-service-mail",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "private": true,
   "description": "Customizable SMTP solution in Pryv.io that mocks Mandrill's API",
   "homepage": "https://pryv.com",
