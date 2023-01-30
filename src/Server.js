@@ -6,7 +6,7 @@
  */
 const http = require('http');
 const express = require('express');
-const bluebird = require('bluebird');
+const util = require('util');
 const bodyParser = require('body-parser');
 
 const logging = require('./logging');
@@ -51,7 +51,7 @@ class Server {
     const port = settings.get(KEY_PORT);
 
     const server = this.server = http.createServer(app);
-    const serverListen = bluebird.promisify(server.listen, { context: server });
+    const serverListen = util.promisify(server.listen).bind(server);
 
     await serverListen(port, ip);
 
@@ -68,7 +68,7 @@ class Server {
 
     this.logger.info('stopping...');
 
-    const serverClose = bluebird.promisify(server.close, { context: server });
+    const serverClose = util.promisify(server.close).bind(server);
     await serverClose();
 
     this.logger.info('stopped.');

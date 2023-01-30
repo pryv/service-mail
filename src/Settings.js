@@ -4,8 +4,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
-const fs = require('fs');
-const bluebird = require('bluebird');
+const fs = require('fs/promises');
 const lodash = require('lodash');
 const Hjson = require('hjson');
 const YAML = require('js-yaml');
@@ -94,8 +93,7 @@ class Settings {
   //    -> https://www.npmjs.com/package/js-yaml
   //
   async loadFromFile (path) {
-    const readFile = bluebird.promisify(fs.readFile);
-    const text = await readFile(path, { encoding: 'utf8' });
+    const text = await fs.readFile(path, { encoding: 'utf8' });
 
     let obj;
 
