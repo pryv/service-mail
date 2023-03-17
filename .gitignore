@@ -7,6 +7,7 @@
 .nyc_output/
 .project
 .settings
+application.log
 /out
 build/build_tag
 build/mail/bin
