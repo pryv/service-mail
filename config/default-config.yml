@@ -1,0 +1,29 @@
+---
+logs:
+  prefix: ''
+  console:
+    active: true
+    level: info
+    colorize: true
+  file:
+    active: false
+email:
+  message:
+    from:
+      name: Ethereal Email
+      address: changeme@ethereal.email
+  preview: false
+  send: true
+smtp:
+  host: smtp.ethereal.email
+  port: 587
+sendmail:
+  active: true
+  path: "/usr/sbin/sendmail"
+http:
+  ip: 127.0.0.1
+  port: 9000
+  auth: SHOULD_MATCH_SERVICE_MAIL
+templates:
+  root: "/Users/perki/wActiv/service-mail/templates"
+  defaultLang: en

@@ -13,12 +13,11 @@ const Sender = require('./mail/Sender');
 // and together make up the configuration of the system.
 //
 class Context {
-  constructor (settings, logFactory) {
-    const logger = this.logger = logFactory('context');
-    const defaultLanguage = this.defaultLanguage = settings.get('templates.defaultLang');
+  constructor (settings, logger) {
+    this.logger = logger;
+    const defaultLanguage = this.defaultLanguage = settings.get('templates:defaultLang');
 
-    this.logFactory = logFactory;
-    this.authKey = settings.get('http.auth');
+    this.authKey = settings.get('http:auth');
 
     const delivery = this.deliveryService = this.configureDelivery(settings, logger);
     this.templateRepository = new TemplateRepository(defaultLanguage, delivery.templateExists);
@@ -26,12 +25,12 @@ class Context {
   }
 
   configureTransport (settings, logger) {
-    if (settings.get('sendmail.active')) {
+    if (settings.get('sendmail:active')) {
       // Using sendmail command
       logger.info('Using sendmail command to send emails.');
       return {
         sendmail: true,
-        path: settings.get('sendmail.path')
+        path: settings.get('sendmail:path')
       };
     } else {
       // Using SMTP

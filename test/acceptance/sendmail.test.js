@@ -244,7 +244,7 @@ describe('Sending emails through SMTP', function () {
     });
 
     it('has a valid envelope (from/to)', async () => {
-      const expectedFrom = app.settings.get('email.message.from');
+      const expectedFrom = app.settings.get('email:message:from');
       assert.isNotNull(emailEnvelope.to);
       assert.strictEqual(emailEnvelope.to.length, 1);
       assert.strictEqual(emailEnvelope.to[0], recipient.email);
