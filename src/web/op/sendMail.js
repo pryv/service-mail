@@ -6,11 +6,12 @@
  */
 const errors = require('../../errors');
 
+const { getLogger } = require('@pryv/boiler');
+const logger = getLogger('sendmail');
+
 /** POST /sendmail/welcome - Send a welcome email.
  */
 async function sendMail (ctx, req, res) {
-  const logger = ctx.logFactory('sendmail');
-
   const lang = req.params.lang;
   const template = req.params.template;
   const substitutions = req.body.substitutions;

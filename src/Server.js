@@ -9,22 +9,20 @@ const express = require('express');
 const util = require('util');
 const bodyParser = require('body-parser');
 
-const logging = require('./logging');
+const { getLogger } = require('@pryv/boiler');
+
 const controllerFactory = require('./web/controller');
 
-const KEY_IP = 'http.ip';
-const KEY_PORT = 'http.port';
+const KEY_IP = 'http:ip';
+const KEY_PORT = 'http:port';
 
 /**
  * HTTP server responsible for the REST api that the mailing server exposes.
  */
 class Server {
   constructor (settings, context) {
-    const logSettings = settings.get('logs');
-    const logFactory = logging(logSettings);
-
-    this.logger = logFactory.getLogger('mailing-server');
-    this.errorLogger = logFactory.getLogger('errors');
+    this.logger = getLogger('mailing-server');
+    this.errorLogger = getLogger('errors');
     this.settings = settings;
 
     this.context = context;
