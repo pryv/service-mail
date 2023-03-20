@@ -27,7 +27,7 @@ install-stable:
 
 # Start the server
 start:
-    NODE_ENV=development ./bin/server --config ./config.yml
+    NODE_ENV=development ./bin/server
 
 # –––––––––––––----------------------------------------------------------------
 # Test & related
