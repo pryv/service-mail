@@ -21,8 +21,6 @@ const KEY_PORT = 'http:port';
  */
 class Server {
   constructor (settings, context) {
-    const logSettings = settings.get('logs');
-
     this.logger = getLogger('mailing-server');
     this.errorLogger = getLogger('errors');
     this.settings = settings;

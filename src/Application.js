@@ -21,7 +21,6 @@ const Server = require('./Server');
  * together.
  */
 class Application {
-
   async setup (testConfig) {
     this.settings = await getConfig();
     this.settings.injectTestConfig(testConfig || {});
