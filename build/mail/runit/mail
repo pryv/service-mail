@@ -7,8 +7,12 @@ cd /app/bin
 chown -R app:app /app/log/
 
 # Setup sendmail (at startup because it depends on current container hostname)
-echo "127.0.0.1 localhost localhost.localdomain $HOSTNAME" >> /etc/hosts && yes 'Y' | sendmailconfig
+if node /app/bin/build/scripts/sendmail-test.js | grep "TRUE" -q; then
+  echo "127.0.0.1 localhost localhost.localdomain $HOSTNAME" >> /etc/hosts && yes 'Y' | sendmailconfig
+else 
+  echo "SKIPING sendmail"
+fi
 
 export NODE_ENV=production
 export NODE_PATH=/app/bin/
-exec chpst -u app /app/bin/bin/server --config /app/conf/mail.json
+chpst -u app /app/bin/bin/server --config /app/conf/mail.json

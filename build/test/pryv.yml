@@ -1,0 +1,14 @@
+version: '3.5'
+services:
+  mail:
+      image: "localhost/pryvio/mail:test"
+      container_name: pryvio_mail
+      ports:
+        - 9000:9000
+      volumes:
+        - ${PRYV_CONF_ROOT}/pryv/mail/conf/:/app/conf/:ro
+        - ${PRYV_CONF_ROOT}/../../templates/:/app/bin/templates/:ro
+        - ${PRYV_CONF_ROOT}/pryv/mail/log/:/app/log/
+      environment:
+        - HOSTNAME=$HOSTNAME
+      restart: always
