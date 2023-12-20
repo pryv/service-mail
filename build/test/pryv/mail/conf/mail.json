@@ -3,7 +3,7 @@
     "prefix": "",
     "console": { 
       "active": true,
-      "level": "warn",
+      "level": "info",
       "colorize": true 
     }, 
     "file": {

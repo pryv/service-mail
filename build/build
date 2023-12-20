@@ -24,8 +24,10 @@ fi
 
 
 echo "---------------------------- building mail ------------------------------"
-docker build --progress=plain -f build/mail/Dockerfile -t $host/pryvio/mail:$version .
-if [ "$release" = true ]; then
+docker build  -f build/mail/Dockerfile -t $host/pryvio/mail:$version .
+
+if [ "$release" = true ] 
+then
   docker push $host/pryvio/mail:$version
 fi
 
