@@ -37,6 +37,6 @@
   },
   "templates": {
     "defaultLang": "en",
-    "roo": "/app/bin/templates"
+    "root": "/app/bin/templates"
   }
 }
