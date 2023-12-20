@@ -7,7 +7,9 @@
       "colorize": true 
     }, 
     "file": {
-      "active": false
+      "active": true,
+      "level": "info",
+      "path": "/app/log/mail.log"
     }
   },
   "email": {
@@ -34,6 +36,7 @@
     "auth": "CHANGEME"
   },
   "templates": {
-    "defaultLang": "en"
+    "defaultLang": "en",
+    "root": "/app/bin/templates"
   }
 }

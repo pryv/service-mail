@@ -2,26 +2,32 @@
 
 set -e
 
+# Determine the build_tag and whether we need to release.
+SCRIPT_FOLDER=$(cd $(dirname "$0"); pwd)
+cd ..
+
+
 # Builds 'service-mail' docker image with the version given below. 
 
 # Determine the build_tag and whether we need to release.
-scripts/build_name
-version=$(cat build_tag)
+build/scripts/build_name
+if [ "$1" == "test" ]
+then
+  version=test
+  host=localhost
+  release=false
+else
+  version=$(cat build_tag)
+  host='eu.gcr.io'
+  release=true
+fi
 
-mkdir -p mail/bin
-rsync -a ../ mail/bin \
-  --exclude node_modules \
-  --exclude .github \
-  --exclude build \
-  --exclude config \
-  --exclude test \
-  --exclude .gitignore \
-  --exclude .git
-
-host='eu.gcr.io'
 
 echo "---------------------------- building mail ------------------------------"
-pushd mail
-docker build -f Dockerfile -t $host/pryvio/mail:$version .
-docker push $host/pryvio/mail:$version
-popd
+docker build  -f build/mail/Dockerfile -t $host/pryvio/mail:$version .
+
+if [ "$release" = true ] 
+then
+  docker push $host/pryvio/mail:$version
+fi
+

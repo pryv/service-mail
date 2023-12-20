@@ -18,3 +18,4 @@ node_modules/
 proxy/nginx.conf
 service-mail.iml
 npm-debug.log
+build/test/pryv/mail/log/mail.log
