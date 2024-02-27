@@ -6,4 +6,4 @@ export PRYV_CONF_ROOT=$SCRIPT_FOLDER
 mkdir -p ${PRYV_CONF_ROOT}/pryv/mail/log
 sudo chown -R 9999:9999 ${PRYV_CONF_ROOT}/pryv/mail/log 
 
-HOSTNAME=l.rec.la docker-compose -f ${PRYV_CONF_ROOT}/pryv.yml up
+HOSTNAME=l.backloop.dev docker-compose -f ${PRYV_CONF_ROOT}/pryv.yml up
