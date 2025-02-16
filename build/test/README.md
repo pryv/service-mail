@@ -11,4 +11,4 @@ Requires an AMD64 machine with Docker accessible at user level.
 
 ## License
 
-[UNLICENSED](LICENSE)
+[BSD-3-Clause](LICENSE)
