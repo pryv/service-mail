@@ -64,7 +64,7 @@ Here is a sample configuration that shows all available settings alongside with 
       // Sender name and email address
       from: {
         name: "Ethereal Email",
-        address: "btvryvs5al5mjpa3@ethereal.email"
+        address: "youruser@ethereal.email"
       }
     },
     preview: false, // If true, it will open a webpage with a preview
@@ -78,8 +78,8 @@ Here is a sample configuration that shows all available settings alongside with 
     port: 587,
     // Credentials to authenticate against SMTP server
     auth: {
-      user: "btvryvs5al5mjpa3@ethereal.email",
-      pass: "VfNxJctkjrURkyThZr"
+      user: "youruser@ethereal.email",
+      pass: "youkey"
     }
   },
   // Alternative transport, using the sendmail command of the machine
