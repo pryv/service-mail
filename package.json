@@ -18,7 +18,7 @@
     "@pryv/boiler": "https://github.com/pryv/pryv-boiler.git#semver:^1.1.1",
     "body-parser": "^1.20.1",
     "email-templates": "^10.0.1",
-    "express": "^4.18.2",
+    "express": "^4.21.2",
     "superagent": "^8.0.9"
   },
   "devDependencies": {
