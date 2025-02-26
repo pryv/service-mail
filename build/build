@@ -22,8 +22,6 @@ else
   release=true
 fi
 
-version=1.9.0
-
 echo "---------------------------- building mail ------------------------------"
 docker build  -f build/mail/Dockerfile -t $host/pryvio/mail:$version .
 
