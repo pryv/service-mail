@@ -1,4 +1,4 @@
-FROM eu.gcr.io/pryvio/base:1.9.0
+FROM docker.io/pryvio/base:1.9.0
 LABEL maintainer="Pryv<tech@pryv.com>"
 
 # Set main paths that will be reused in this docker file

@@ -110,6 +110,9 @@ Here is a sample configuration that shows all available settings alongside with 
 
 ## Contributing
 
+### Todo 
+- realease github workflow has been archived in `archives` it needs to rewritten to publish on dockerHub
+
 ### Installation
 
 Prerequisites: [Node.js](https://nodejs.org/en/download/) 16, [just](https://github.com/casey/just#installation)
